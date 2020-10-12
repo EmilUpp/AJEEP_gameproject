@@ -426,11 +426,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5259658079932534377, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: m_Mass
-      value: 696.91
+      value: 33.510323
       objectReference: {fileID: 0}
     - target: {fileID: 5259658079932534676, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: diameter
-      value: 11
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5259658079932534677, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: m_Name
@@ -482,11 +482,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5259658079932534678, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: m_LocalScale.x
-      value: 11
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5259658079932534678, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: m_LocalScale.y
-      value: 11
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3092f256709f5f141a768569ad802193, type: 3}
