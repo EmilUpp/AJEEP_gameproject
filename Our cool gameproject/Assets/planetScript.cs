@@ -93,11 +93,6 @@ public class planetScript : MonoBehaviour
         triangles.Add(counter);
         triangles.Add(1);
 
-        foreach (int triangle in triangles)
-        {
-            Debug.Log(triangle);
-        }
-
         return triangles.ToArray();
     }
 }
