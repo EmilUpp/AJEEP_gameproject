@@ -100,7 +100,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   diameter: 2
   density: 1
-  rb: {fileID: 5259658079932534377}
 --- !u!114 &5259658079932534376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,7 +112,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a25202a0a24ce046b9a5089a87e4c54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 5259658079932534377}
 --- !u!50 &5259658079932534377
 Rigidbody2D:
   serializedVersion: 4
@@ -122,7 +120,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5259658079932534677}
-  m_BodyType: 0
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0

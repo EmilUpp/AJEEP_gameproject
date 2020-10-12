@@ -215,7 +215,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5259658079932534377, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: m_Mass
-      value: 142.41887
+      value: 41.8879
       objectReference: {fileID: 0}
     - target: {fileID: 5259658079932534676, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: diameter
@@ -223,7 +223,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5259658079932534676, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: density
-      value: 34
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5259658079932534677, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: m_Name
@@ -231,11 +231,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5259658079932534678, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.29
+      value: 28.24
       objectReference: {fileID: 0}
     - target: {fileID: 5259658079932534678, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.49
+      value: 9.52
       objectReference: {fileID: 0}
     - target: {fileID: 5259658079932534678, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: m_LocalPosition.z
@@ -380,7 +380,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 10
+  m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -426,23 +426,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5259658079932534377, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: m_Mass
-      value: 696.91
+      value: 2090.73
       objectReference: {fileID: 0}
     - target: {fileID: 5259658079932534676, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: diameter
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 5259658079932534676, guid: 3092f256709f5f141a768569ad802193, type: 3}
+      propertyPath: density
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5259658079932534677, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: m_Name
-      value: Planet
+      value: Sun
       objectReference: {fileID: 0}
     - target: {fileID: 5259658079932534678, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 28.43
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5259658079932534678, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.51
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5259658079932534678, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: m_LocalPosition.z
@@ -487,6 +491,18 @@ PrefabInstance:
     - target: {fileID: 5259658079932534678, guid: 3092f256709f5f141a768569ad802193, type: 3}
       propertyPath: m_LocalScale.y
       value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5259658079932534679, guid: 3092f256709f5f141a768569ad802193, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5259658079932534679, guid: 3092f256709f5f141a768569ad802193, type: 3}
+      propertyPath: m_Color.g
+      value: 0.9318118
+      objectReference: {fileID: 0}
+    - target: {fileID: 5259658079932534679, guid: 3092f256709f5f141a768569ad802193, type: 3}
+      propertyPath: m_Color.b
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3092f256709f5f141a768569ad802193, type: 3}
