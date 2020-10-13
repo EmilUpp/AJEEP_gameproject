@@ -5,10 +5,19 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class planetScript : MonoBehaviour
 {
+    //TODO Comment class
+
     public int diameter = 2;
     public int density = 1;
 
     private Rigidbody2D rb;
+
+    [Range(0,0.5f)]
+    public float amplitude;
+    [Range(0, 4)]
+    public float scale;
+    int seed;
+    public bool generateSeed;
 
     public int verticesAmount;
     Mesh mesh;
@@ -26,12 +35,17 @@ public class planetScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (generateSeed)
+        {
+            seed = Random.Range(0, 100000);
+        }
+        generateSeed = false;
+
         transform.localScale = new Vector3(diameter, diameter);
         float volume = 4 * Mathf.PI * Mathf.Pow((diameter / 2f), 3) / 3;
 
         rb.mass = volume * density;
 
-        Debug.Log("Updated");
         createShape(verticesAmount);
         UpdateMesh();
         mesh.RecalculateBounds();
@@ -51,8 +65,9 @@ public class planetScript : MonoBehaviour
         triangles = createCircleTriangleList(verticesAmount);
     }
 
-    static Vector3[] createCircleVerteciesList(int verticesAmount)
+    Vector3[] createCircleVerteciesList(int verticesAmount)
     {
+        //TODO add perlinnoise
         float step = (2 * Mathf.PI) / verticesAmount;
 
         Vector3[] vertices = new Vector3[verticesAmount + 1];
@@ -60,7 +75,10 @@ public class planetScript : MonoBehaviour
         vertices[0] = new Vector2(0, 0);
         for (int i=1; i < verticesAmount + 1; i++)
         {
-            vertices[i] = new Vector3(Mathf.Cos((i-1) * step), Mathf.Sin((i-1) * step), 0);
+            float xCoord = Mathf.Cos((i - 1) * step);
+            float yCoord = Mathf.Sin((i - 1) * step);
+            float noise = amplitude * 2 * (Mathf.PerlinNoise((seed + xCoord)*scale, (seed + yCoord)*scale) - 0.5f);
+            vertices[i] = new Vector3(noise + xCoord, noise + yCoord, 0);
         }
 
         return vertices;
