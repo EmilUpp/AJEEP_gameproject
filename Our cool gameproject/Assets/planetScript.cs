@@ -6,7 +6,7 @@ using UnityEngine;
  * Class for handling the planet objects
  * Allows for resizing planets and automatic calculation os mass
  * 
- * Creates a mesh using perlinnoise to make the surface "bumpy"
+ * Creates a mesh using perlin noise to make the surface "bumpy"
  * Amplitude, how much the perlin noise should be scaled, higher values means higher max
  * Scale, the size of the sample area, hiher values means smaller bumps meaning more jagged surface
  * Seed, how much to offset the sample points on and infinite plane, cahnges all the noise values
@@ -27,8 +27,14 @@ public class planetScript : MonoBehaviour
     [Header("Noise properties")]
     [Range(0,0.5f)]
     public float amplitude;
-    [Range(0, 4)]
-    public float scale;
+    [Range(0.1f, 5)]
+    public float sampleSize;
+    [Range(0, 10)]
+    public int octaves;
+    [Range(0, 0.99f)]
+    public float persitence;
+    [Range(1, 5)]
+    public float lacunarity;
     int seed;
     public bool generateSeed;
 
@@ -64,7 +70,6 @@ public class planetScript : MonoBehaviour
         // Creates the mesh
         createShape(verticesAmount);
         UpdateMesh();
-        mesh.RecalculateBounds();
     }
 
     void UpdateMesh()
@@ -74,6 +79,9 @@ public class planetScript : MonoBehaviour
 
         mesh.vertices = vertices;
         mesh.triangles = triangles;
+
+        mesh.RecalculateBounds();
+        mesh.RecalculateNormals();
     }
 
     void createShape(int verticesAmount)
@@ -87,6 +95,7 @@ public class planetScript : MonoBehaviour
     Vector3[] createCircleVerteciesList(int verticesAmount)
     {
         // Create the list of vertecies forming the circle and adds perlinnoise
+        float[] noiseMap = Noise.generate1DNoiseMap(verticesAmount, sampleSize, octaves, persitence, lacunarity, seed);
 
         // Distance between points on the edge in radians
         float step = (2 * Mathf.PI) / verticesAmount;
@@ -101,12 +110,13 @@ public class planetScript : MonoBehaviour
             float xCoord = Mathf.Cos((i - 1) * step);
             float yCoord = Mathf.Sin((i - 1) * step);
 
-            // Calculates the noise, offset by seed, scaled by amplitude
-            // Rangges from -1 to 1
-            float noise = amplitude * 2 * (Mathf.PerlinNoise((seed + xCoord)*scale, (seed + yCoord)*scale) - 0.5f);
+            // Calculates the noise, offset by seed
+            // Ranges from -1 to 1
+            float noise = 1 + amplitude * noiseMap[i - 1];
 
-            vertices[i] = new Vector3(noise + xCoord, noise + yCoord, 0);
+            vertices[i] = new Vector3(noise * xCoord, noise * yCoord, 0);
         }
+
 
         return vertices;
     }
