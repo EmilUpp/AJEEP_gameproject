@@ -19,8 +19,8 @@ using UnityEngine;
 public class planetScript : MonoBehaviour
 {
     [Header("Planet dimensions")]
-    public int diameter = 2;
-    public int density = 1;
+    public float diameter = 2;
+    public float density = 1;
 
     private Rigidbody2D rb;
 
