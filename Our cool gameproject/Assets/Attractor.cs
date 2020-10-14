@@ -8,7 +8,7 @@ using UnityEngine;
 public class Attractor : MonoBehaviour
 {
     // Gravinational constant, used to scale
-    const float G = 6.674f;
+    const float G = 1f;
 
     public static List<Attractor> attractors;
 
@@ -23,7 +23,7 @@ public class Attractor : MonoBehaviour
     {
         foreach(Attractor attractor in attractors)
         {
-            if (attractor != this)
+            if (attractor != this && !attractor.GetComponent<planetScript>())
             {
                 Attract(attractor);
             }
