@@ -36,6 +36,8 @@ public class planetScript : MonoBehaviour
     public float persitence;
     [Range(1, 5)]
     public float lacunarity;
+    //public bool updateWithVa
+    [SerializeField]
     int seed;
     public bool generateSeed;
 
@@ -50,9 +52,11 @@ public class planetScript : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
 
         mesh = new Mesh();
-        GetComponent<MeshFilter>().mesh = mesh;
+        gameObject.GetComponent<MeshFilter>().mesh = mesh;
 
-        generatePlanet();
+        generateSeed = false;
+        generateNewPlanet = false;
+        //generatePlanet();
     }
 
     // Update is called once per frame
@@ -75,6 +79,10 @@ public class planetScript : MonoBehaviour
         transform.localScale = new Vector3(diameter, diameter);
         float volume = 4 * Mathf.PI * Mathf.Pow((diameter / 2f), 3) / 3;
         rb.mass = volume * density;
+
+        // Creates the mesh
+        createShape(verticesAmount);
+        UpdateMesh();
     }
 
     void generatePlanet()
@@ -184,9 +192,5 @@ public class planetScript : MonoBehaviour
         {
             verticesAmount = 4;
         }
-
-        // Creates the mesh
-        createShape(verticesAmount);
-        UpdateMesh();
     }
 }
