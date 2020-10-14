@@ -25,11 +25,12 @@ public class planetScript : MonoBehaviour
     private Rigidbody2D rb;
 
     [Header("Noise properties")]
+    public bool generateNewPlanet;
     [Range(0,0.5f)]
     public float amplitude;
     [Range(0.1f, 5)]
     public float sampleSize;
-    [Range(0, 10)]
+    [Range(1, 10)]
     public int octaves;
     [Range(0, 0.99f)]
     public float persitence;
@@ -50,6 +51,8 @@ public class planetScript : MonoBehaviour
 
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
+
+        generatePlanet();
     }
 
     // Update is called once per frame
@@ -62,10 +65,28 @@ public class planetScript : MonoBehaviour
         }
         generateSeed = false;
 
+        if (generateNewPlanet)
+        {
+            generatePlanet();
+        }
+        generateNewPlanet = false;
+
         // Automaticly scales the planet and recalculates mass
         transform.localScale = new Vector3(diameter, diameter);
         float volume = 4 * Mathf.PI * Mathf.Pow((diameter / 2f), 3) / 3;
         rb.mass = volume * density;
+    }
+
+    void generatePlanet()
+    {
+        // Randomizes all values and creates a new mesh
+
+        amplitude = Random.Range(0.2f, 0.35f);
+        sampleSize = Random.Range(0.5f, 3);
+        octaves = Random.Range(2, 5);
+        persitence = Random.Range(0.3f, 0.7f);
+        lacunarity = Random.Range(1.5f, 4);
+        seed = Random.Range(0, 100000);
 
         // Creates the mesh
         createShape(verticesAmount);
@@ -128,7 +149,7 @@ public class planetScript : MonoBehaviour
         List<int> triangles = new List<int>();
         int counter = 1;
 
-        // Makes sure it start of clockwise
+        // Makes sure it starts of clockwise
         triangles.Add(0);
 
         while (counter < verticesAmount)
@@ -155,5 +176,17 @@ public class planetScript : MonoBehaviour
         triangles.Add(1);
 
         return triangles.ToArray();
+    }
+
+    private void OnValidate()
+    {
+        if (verticesAmount < 4)
+        {
+            verticesAmount = 4;
+        }
+
+        // Creates the mesh
+        createShape(verticesAmount);
+        UpdateMesh();
     }
 }
