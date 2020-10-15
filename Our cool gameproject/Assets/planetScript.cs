@@ -21,6 +21,7 @@ public class planetScript : MonoBehaviour
     [Header("Planet dimensions")]
     public float diameter = 2;
     public float density = 1;
+    float baseScale;
 
     private Rigidbody2D rb;
 
@@ -62,6 +63,9 @@ public class planetScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector3 tmpScale = transform.localScale;
+        baseScale = 1;
+
         // Allows to generate new seed in editor
         if (generateSeed)
         {
@@ -69,16 +73,33 @@ public class planetScript : MonoBehaviour
         }
         generateSeed = false;
 
+        // Allows to generate new planet in editor
         if (generateNewPlanet)
         {
             generatePlanet();
         }
         generateNewPlanet = false;
 
-        // Automaticly scales the planet and recalculates mass
+        // Updates mass
         transform.localScale = new Vector3(diameter, diameter);
         float volume = 4 * Mathf.PI * Mathf.Pow((diameter / 2f), 3) / 3;
         rb.mass = volume * density;
+
+        /*
+        foreach (Transform child in GetComponentsInChildren<Transform>())
+        {
+            if (child == transform)
+            {
+                continue;
+            }
+            if (child.parent != transform)
+            {
+                continue;
+            }
+
+            child.GetComponent<planetScript>().diameter = baseScale / transform.localScale.x;
+        }
+        */
 
         // Creates the mesh
         createShape(verticesAmount);

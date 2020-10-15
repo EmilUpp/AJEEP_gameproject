@@ -51,14 +51,14 @@ MonoBehaviour:
   diameter: 2
   density: 1
   generateNewPlanet: 0
-  amplitude: 0
-  sampleSize: 0
-  octaves: 0
-  persitence: 0
-  lacunarity: 0
+  amplitude: 0.3
+  sampleSize: 2
+  octaves: 3
+  persitence: 0.5
+  lacunarity: 2
   seed: 0
   generateSeed: 0
-  verticesAmount: 4
+  verticesAmount: 64
   vertices: []
   triangles: 
 --- !u!114 &5259658079932534376
