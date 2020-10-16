@@ -48,7 +48,7 @@ public class planetScript : MonoBehaviour
     public Vector3[] vertices;
     public int[] triangles;
 
-    private void Start()
+    public void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
 
@@ -106,7 +106,7 @@ public class planetScript : MonoBehaviour
         UpdateMesh();
     }
 
-    void generatePlanet()
+    public void generatePlanet()
     {
         // Randomizes all values and creates a new mesh
 
