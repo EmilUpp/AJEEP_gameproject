@@ -57,7 +57,7 @@ public class planetScript : MonoBehaviour
 
         generateSeed = false;
         generateNewPlanet = false;
-        //generatePlanet();
+        generatePlanet();
     }
 
     // Update is called once per frame
@@ -102,8 +102,8 @@ public class planetScript : MonoBehaviour
         */
 
         // Creates the mesh
-        createShape(verticesAmount);
-        UpdateMesh();
+        //createShape(verticesAmount);
+        //UpdateMesh();
     }
 
     public void generatePlanet()
