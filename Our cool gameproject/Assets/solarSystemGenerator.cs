@@ -80,7 +80,11 @@ public class solarSystemGenerator : MonoBehaviour
 
             // Start the planetScript
             newPlanet.GetComponent<planetScript>().Start();
+<<<<<<< HEAD
             newPlanet.GetComponent<planetScript>().diameter = (mainBody.GetComponent<planetScript>().diameter / 3) * Random.Range(0.5f, 1.5f);
+=======
+            newPlanet.GetComponent<planetScript>().diameter = mainBody.GetComponent<planetScript>().diameter / 3;
+>>>>>>> main
 
             // set position, each planet gets expoentially further out
             float parentDistanceToGrandparent = 40;
@@ -109,6 +113,7 @@ public class solarSystemGenerator : MonoBehaviour
 
             // Start the planetScript
             newPlanet.GetComponent<planetScript>().Start();
+<<<<<<< HEAD
             newPlanet.GetComponent<planetScript>().diameter = (mainBody.GetComponent<planetScript>().diameter / 2) * Random.Range(0.5f, 1.5f);
 
             // set position
@@ -117,6 +122,14 @@ public class solarSystemGenerator : MonoBehaviour
                                                         parentDistanceToGrandparent * currentMoonDepth * Random.Range(0.5f, 2f), 0);
 
             newPlanet.GetComponent<orbitAroundBody>().desiredDistance = newPlanet.transform.position.magnitude;
+=======
+            newPlanet.GetComponent<planetScript>().diameter = mainBody.GetComponent<planetScript>().diameter / 2;
+
+            // set position
+            float parentDistanceToGrandparent = 5;
+            newPlanet.transform.position += new Vector3(parentDistanceToGrandparent * currentMoonDepth * Random.Range(0.75f, 1.25f),
+                                                        parentDistanceToGrandparent * currentMoonDepth * Random.Range(0.75f, 1.25f), 0);
+>>>>>>> main
 
             // Lower the amount of submoons possible
             int newNumberOfMoons = (int)Mathf.Sqrt(numberOfMoons);

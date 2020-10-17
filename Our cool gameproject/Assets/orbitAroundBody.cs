@@ -12,8 +12,14 @@ public class orbitAroundBody : MonoBehaviour
     public float desiredDistance;
     
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
+
+        if (transform.parent != null)
+        {
+            bodyToOrbit = transform.parent;
+        }
+
         desiredDistance = distanceToTarget();
     }
 
