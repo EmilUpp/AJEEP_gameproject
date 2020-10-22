@@ -23,6 +23,8 @@ public class planetScript : MonoBehaviour
     public float density = 1;
     float baseScale;
 
+    public int planetsOrbitingThisBody;
+
     private Rigidbody2D rb;
 
     [Header("Noise properties")]
@@ -48,7 +50,7 @@ public class planetScript : MonoBehaviour
     public Vector3[] vertices;
     public int[] triangles;
 
-    public void Start()
+    public void InstanstiatePlanet()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
 
@@ -57,14 +59,12 @@ public class planetScript : MonoBehaviour
 
         generateSeed = false;
         generateNewPlanet = false;
-        generatePlanet();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 tmpScale = transform.localScale;
-        baseScale = 1;
+        planetsOrbitingThisBody = countSubPlanets();
 
         // Allows to generate new seed in editor
         if (generateSeed)
@@ -84,26 +84,6 @@ public class planetScript : MonoBehaviour
         transform.localScale = new Vector3(diameter, diameter);
         float volume = 4 * Mathf.PI * Mathf.Pow((diameter / 2f), 3) / 3;
         rb.mass = volume * density;
-
-        /*
-        foreach (Transform child in GetComponentsInChildren<Transform>())
-        {
-            if (child == transform)
-            {
-                continue;
-            }
-            if (child.parent != transform)
-            {
-                continue;
-            }
-
-            child.GetComponent<planetScript>().diameter = baseScale / transform.localScale.x;
-        }
-        */
-
-        // Creates the mesh
-        //createShape(verticesAmount);
-        //UpdateMesh();
     }
 
     public void generatePlanet()
@@ -122,7 +102,7 @@ public class planetScript : MonoBehaviour
         UpdateMesh();
     }
 
-    void UpdateMesh()
+    public void UpdateMesh()
     {
         // Clears old values
         mesh.Clear();
@@ -134,7 +114,7 @@ public class planetScript : MonoBehaviour
         mesh.RecalculateNormals();
     }
 
-    void createShape(int verticesAmount)
+    public void createShape(int verticesAmount)
     {
         // Updates vertices and triangles
 
@@ -213,5 +193,19 @@ public class planetScript : MonoBehaviour
         {
             verticesAmount = 4;
         }
+    }
+
+    int countSubPlanets()
+    {
+        int childCount = 0;
+        foreach (Transform child in transform.GetComponentsInChildren<Transform>())
+        {
+            if (child.GetComponent<planetScript>() != null && child != transform)
+            {
+                childCount += 1 + child.GetComponent<planetScript>().countSubPlanets();
+            }
+        }
+
+        return childCount;
     }
 }

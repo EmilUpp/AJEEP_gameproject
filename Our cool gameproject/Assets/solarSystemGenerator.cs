@@ -22,6 +22,7 @@ public class solarSystemGenerator : MonoBehaviour
     public int minMoonAmount;
     public int maxMoonAmount;
     public int moonDepth;
+    public GameObject sun;
 
     public bool newSystem;
 
@@ -35,15 +36,22 @@ public class solarSystemGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (newSystem)
         {
+            if (sun != null)
+            {
+                Destroy(sun);
+            }
+
             newSystem = false;
-            createNewSystem();
+            sun = createNewSystem();
         }
 
+        //ModifySpeed(speedFactor);
     }
 
-    void createNewSystem()
+    GameObject createNewSystem()
     {
         // Creates the system
 
@@ -57,12 +65,21 @@ public class solarSystemGenerator : MonoBehaviour
         Destroy(sunOrbitScript);
 
         // Starts its script
-        sun.GetComponent<planetScript>().Start();
+        sun.GetComponent<planetScript>().InstanstiatePlanet();
+
+        sun.GetComponent<planetScript>().amplitude = 0.01f;
+        // Creates the mesh
+        sun.GetComponent<planetScript>().createShape(sun.GetComponent<planetScript>().verticesAmount);
+        sun.GetComponent<planetScript>().UpdateMesh();
+
+        sun.GetComponent<planetScript>().diameter = 20;
 
         // Adds planets orbiting itself
         addSubPlanets(sun, numberOfPlanets, new int[] { minMoonAmount, maxMoonAmount}, moonDepth);
 
+        return sun;
     }
+
 
     public void addSubPlanets(GameObject mainBody, int numberOfPlanets, int[] numberOfMoonsRange, int maxMoonDepth)
     {
@@ -76,16 +93,17 @@ public class solarSystemGenerator : MonoBehaviour
 
             // Start the orbitAroundBody script
             newPlanet.GetComponent<orbitAroundBody>().Start();
-            newPlanet.GetComponent<orbitAroundBody>().speed = Random.Range(200, 800);
+            newPlanet.GetComponent<orbitAroundBody>().speed = Random.Range(100, 300);
 
             // Start the planetScript
-            newPlanet.GetComponent<planetScript>().Start();
-            newPlanet.GetComponent<planetScript>().diameter = (mainBody.GetComponent<planetScript>().diameter / 3) * Random.Range(0.5f, 1.5f);
+            newPlanet.GetComponent<planetScript>().InstanstiatePlanet();
+            newPlanet.GetComponent<planetScript>().generatePlanet();
+            newPlanet.GetComponent<planetScript>().diameter = (mainBody.GetComponent<planetScript>().diameter / 40) * Random.Range(0.5f, 1.5f);
 
             // set position, each planet gets expoentially further out
             float parentDistanceToGrandparent = 40;
-            newPlanet.transform.position += new Vector3(parentDistanceToGrandparent * Mathf.Pow(i + 1, 2) * Random.Range(0.75f, 1.25f),
-                                                        parentDistanceToGrandparent * Mathf.Pow(i + 1, 2) * Random.Range(0.75f, 1.25f), 0);
+            newPlanet.transform.position += new Vector3(parentDistanceToGrandparent * Mathf.Pow(i + 2, 2) * Random.Range(0.75f, 1.25f),
+                                                        parentDistanceToGrandparent * Mathf.Pow(i + 2, 2) * Random.Range(0.75f, 1.25f), 0);
 
 
             newPlanet.GetComponent<orbitAroundBody>().desiredDistance = newPlanet.transform.position.magnitude;
@@ -108,21 +126,29 @@ public class solarSystemGenerator : MonoBehaviour
 
             // Start the orbitAroundBody script
             newPlanet.GetComponent<orbitAroundBody>().Start();
-            newPlanet.GetComponent<orbitAroundBody>().speed = -mainBody.GetComponentInParent<orbitAroundBody>().speed * 1.1f * Random.Range(0.8f, 2f);
+
 
             // Start the planetScript
-            newPlanet.GetComponent<planetScript>().Start();
-            newPlanet.GetComponent<planetScript>().diameter = (mainBody.GetComponent<planetScript>().diameter / 2) * Random.Range(0.5f, 1.5f);
+            newPlanet.GetComponent<planetScript>().InstanstiatePlanet();
+            newPlanet.GetComponent<planetScript>().generatePlanet();
+            newPlanet.GetComponent<planetScript>().diameter = (mainBody.GetComponent<planetScript>().diameter / 4) * Random.Range(0.5f, 1.5f);
 
             // set position
-            float parentDistanceToGrandparent = 5;
-            newPlanet.transform.position += new Vector3((parentDistanceToGrandparent / (currentMoonDepth + 1)) * Mathf.Sqrt(i + 1) * Random.Range(0.5f, 2f),
-                                                        (parentDistanceToGrandparent / (currentMoonDepth + 1)) * Mathf.Sqrt(i + 1) * Random.Range(0.5f, 2f), 0);
+            float parentDistanceToGrandparent;
+            if (currentMoonDepth == 0)
+            {
+                parentDistanceToGrandparent = 30 * Random.Range(0.5f, 2f);
+                newPlanet.GetComponent<orbitAroundBody>().speed = Random.Range(800, 1200);
+            } else
+            {
+                parentDistanceToGrandparent = (mainBody.GetComponent<orbitAroundBody>().distanceToTarget() / (4 * currentMoonDepth)) * Random.Range(0.5f, 2f);
+                newPlanet.GetComponent<orbitAroundBody>().speed = mainBody.GetComponent<orbitAroundBody>().speed * 1.5f * Random.Range(0.8f, 2f);
+            }
 
-            newPlanet.GetComponent<orbitAroundBody>().desiredDistance = newPlanet.transform.position.magnitude;
+            newPlanet.transform.position += new Vector3(parentDistanceToGrandparent, parentDistanceToGrandparent, 0);
 
             // Lower the amount of submoons possible
-            int newNumberOfMoons = (int)Mathf.Sqrt(numberOfMoons);
+            int newNumberOfMoons = (int)(Mathf.Sqrt(numberOfMoons) * Random.Range(0.5f, 2f));
 
             // Recursivly call addMoons
             if (newNumberOfMoons > 0 && currentMoonDepth < maxMoonDepth)
@@ -138,5 +164,19 @@ public class solarSystemGenerator : MonoBehaviour
         // Creates a string with appropriate amounts of sub
 
         return string.Concat(Enumerable.Repeat("sub", moonDepth)) + "moon";
+    }
+
+    void ModifySpeed(float newSpeed)
+    {
+        if (sun != null)
+        {
+            foreach (Transform child in sun.transform.GetComponentsInChildren<Transform>())
+            {
+                if (child.GetComponent<orbitAroundBody>() != null && child != transform)
+                {
+                    child.GetComponent<orbitAroundBody>().speedFactor = newSpeed;
+                }
+            }
+        }
     }
 }
