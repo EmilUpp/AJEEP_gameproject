@@ -7,6 +7,7 @@ public class orbitAroundBody : MonoBehaviour
 {
     public Transform bodyToOrbit;
     public float speed;
+    public float speedFactor = 1;
 
     public bool setDistance;
     public float desiredDistance;
@@ -26,7 +27,7 @@ public class orbitAroundBody : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.RotateAround(bodyToOrbit.position, Vector3.forward, speed * Time.deltaTime / 100);
+        transform.RotateAround(bodyToOrbit.position, Vector3.forward, speedFactor * speed * Time.deltaTime / 100);
 
         // I think this minimizes flickering
         if (Mathf.Abs(distanceToTarget() - desiredDistance) > 0.1)
@@ -68,6 +69,7 @@ public class OrbitEditor : Editor
         // Creates fields for all public variables
         orbitScript.bodyToOrbit = EditorGUILayout.ObjectField("Body to orbit", orbitScript.bodyToOrbit, typeof(Transform), true) as Transform;
         orbitScript.speed = EditorGUILayout.FloatField("Speed:", orbitScript.speed);
+        orbitScript.speedFactor = EditorGUILayout.FloatField("Speed Factor:", orbitScript.speedFactor);
         orbitScript.setDistance = GUILayout.Toggle(orbitScript.setDistance, "Set distance");
         
         // Only shows the distance field if set distance is true
