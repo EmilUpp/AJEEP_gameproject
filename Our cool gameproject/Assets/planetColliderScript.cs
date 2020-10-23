@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Class for generating the collider to the planet
+ */
 public class planetColliderScript : MonoBehaviour
 {
+
     private PolygonCollider2D polyCollider;
     private Mesh mesh;
 
-    // Start is called before the first frame update
     void Start()
     {
         polyCollider = GetComponent<PolygonCollider2D>();
@@ -15,21 +18,25 @@ public class planetColliderScript : MonoBehaviour
         polyCollider.pathCount = 1;
     }
 
-    // Update is called once per frame
     void Update()
     {
         
-        polyCollider.SetPath(0, ConvertArray(mesh.vertices));
+        polyCollider.SetPath(0, Vector3ArrayToVector2(mesh.vertices));
     }
 
-    Vector2[] ConvertArray(Vector3[] v3)
+    Vector2[] Vector3ArrayToVector2(Vector3[] v3)
     {
-        Vector2[] v2 = new Vector2[v3.Length];
-        for (int i = 0; i < v3.Length; i++)
+        // Converts vector3 array to vector2 array
+
+        Vector2[] v2 = new Vector2[v3.Length - 1];
+        for (int i = 1; i < v3.Length; i++)
         {
             Vector3 tempV3 = v3[i];
-            v2[i] = new Vector2(tempV3.x, tempV3.y);
+            v2[i - 1] = new Vector2(tempV3.x, tempV3.y);
         }
+
+        //v2[v2.Length - 1] = v2[0];
+
         return v2;
     }
 }

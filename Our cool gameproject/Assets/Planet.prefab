@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5259658079932534676}
   - component: {fileID: 5259658079932534376}
   - component: {fileID: 5259658079932534377}
-  - component: {fileID: 5259658079932534379}
   - component: {fileID: 277042720402191558}
   - component: {fileID: 7925707077126600668}
   - component: {fileID: 9074857222012293840}
@@ -63,7 +62,7 @@ MonoBehaviour:
   lacunarity: 2
   seed: 0
   generateSeed: 0
-  verticesAmount: 64
+  verticesAmount: 32
   vertices: []
   triangles: 
 --- !u!114 &5259658079932534376
@@ -99,22 +98,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &5259658079932534379
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5259658079932534677}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!33 &277042720402191558
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -178,6 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bodyToOrbit: {fileID: 0}
   speed: 0
+  speedFactor: 1
   setDistance: 0
   desiredDistance: 1
 --- !u!96 &-9211139656189337145

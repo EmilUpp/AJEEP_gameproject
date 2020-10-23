@@ -135,17 +135,29 @@ public class planetScript : MonoBehaviour
         
         // Adds the center of the circle for drawing purpose
         vertices[0] = new Vector2(0, 0);
+        Debug.Log(name);
         for (int i=1; i < verticesAmount + 1; i++)
         {
             float xCoord = Mathf.Cos((i - 1) * step);
             float yCoord = Mathf.Sin((i - 1) * step);
 
+            if (Mathf.Abs(xCoord) < 0.001f)
+            {
+                xCoord = 0;
+            }
+
+            if (Mathf.Abs(yCoord) < 0.001f)
+            {
+                yCoord = 0;
+            }
+
             // Calculates the noise, offset by seed
             // Ranges from -1 to 1
             float noise = 1 + amplitude * noiseMap[i - 1];
-
+            Debug.Log(xCoord + " " + yCoord + " " + step + " " + i);
             vertices[i] = new Vector3(noise * xCoord, noise * yCoord, 0);
         }
+
 
 
         return vertices;
