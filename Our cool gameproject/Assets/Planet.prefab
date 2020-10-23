@@ -62,7 +62,7 @@ MonoBehaviour:
   lacunarity: 2
   seed: 0
   generateSeed: 0
-  verticesAmount: 32
+  verticesAmount: 64
   vertices: []
   triangles: 
 --- !u!114 &5259658079932534376
