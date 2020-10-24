@@ -3,6 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 /*
  * Class for handling the spaceships movement
+ * 
+ * rotationalThrust, how fast it can rotate
+ * 
+ * trimmThrust, how fast it can move up, down, left, right
+ * 
+ * forwardThrust, how fast it can accelerate forward
+ * 
+ * fuelCapacity, maximum fuel
+ * 
+ * fuel, current fuel level, set to max at start
  */
 public class spaceshipController : MonoBehaviour
 {
@@ -26,6 +36,7 @@ public class spaceshipController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        // Trimm controls
         if (Input.GetAxis("Vertical") != 0)
         {
 
@@ -44,6 +55,7 @@ public class spaceshipController : MonoBehaviour
                                     Input.GetAxis("Horizontal") * trimmThrust * Mathf.Sin((rb.rotation) * Mathf.Deg2Rad)));
         }
 
+        // Rotation controls
         if (Input.GetKey(KeyCode.Q))
         {
             float rotation = rotationalThrust;
@@ -59,6 +71,8 @@ public class spaceshipController : MonoBehaviour
             fuel -= (rotationalThrust / 2500);
         }
 
+
+        // Main engine controls
         if (Input.GetKey(KeyCode.Space) && fuel > 0)
         {
             rb.AddForce(new Vector2(forwardThrust * Mathf.Cos((90 + rb.rotation) * Mathf.Deg2Rad),
