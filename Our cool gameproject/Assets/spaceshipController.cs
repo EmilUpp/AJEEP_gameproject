@@ -42,6 +42,7 @@ public class spaceshipController : MonoBehaviour
         fuel = fuelCapacity;
 
         angularStabilizerOn = false;
+
     }
 
     // Update is called once per frame
