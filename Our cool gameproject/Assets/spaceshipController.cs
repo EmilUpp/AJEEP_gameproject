@@ -60,7 +60,10 @@ public class spaceshipController : MonoBehaviour
             }
         }
 
-        FindCourse(target);
+        if (target != null)
+        {
+            FindCourse(target);
+        }
 
     }
 
