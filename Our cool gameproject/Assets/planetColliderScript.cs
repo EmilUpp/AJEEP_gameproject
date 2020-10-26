@@ -20,7 +20,7 @@ public class planetColliderScript : MonoBehaviour
 
     void Update()
     {
-        // Add the vertice to the polygon path list
+        
         polyCollider.SetPath(0, Vector3ArrayToVector2(mesh.vertices));
     }
 
@@ -34,6 +34,8 @@ public class planetColliderScript : MonoBehaviour
             Vector3 tempV3 = v3[i];
             v2[i - 1] = new Vector2(tempV3.x, tempV3.y);
         }
+
+        //v2[v2.Length - 1] = v2[0];
 
         return v2;
     }
