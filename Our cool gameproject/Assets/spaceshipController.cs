@@ -30,6 +30,9 @@ public class spaceshipController : MonoBehaviour
 
     private bool angularStabilizerOn;
 
+    [Header("Autopilot")]
+    public GameObject target;
+
     private Rigidbody2D rb;
 
     // Start is called before the first frame update
@@ -55,12 +58,14 @@ public class spaceshipController : MonoBehaviour
                 angularStabilizerOn = true;
             }
         }
+
+        FindCourse(target);
+
     }
 
     void FixedUpdate()
     {
-        rb.mass = shipMass + load;
-
+        rb.mass = shipMass + fuel/10f + load;
 
         if (load > loadCapacity)
         {
@@ -145,6 +150,49 @@ public class spaceshipController : MonoBehaviour
                         forwardThrust * Mathf.Sin((90 + rb.rotation) * Mathf.Deg2Rad)));
 
         fuel -= (forwardThrust / 1000);
+    }
+
+    Vector2[] GeneratePathList()
+    {
+        return new Vector2[] {new Vector2(0, 1), new Vector2(0, 2), new Vector2(1, 3) };
+    }
+
+    void DebugDrawPath(Vector2[] pathList)
+    {
+        for (int i=0; i < pathList.Length - 1; i++)
+        {
+            Debug.DrawLine(pathList[i], pathList[i + 1]);
+        }
+    }
+
+    void FindCourse(GameObject target)
+    {
+
+        //Vector3 direction = new Vector3(Mathf.Cos((90 + rb.rotation) * Mathf.Deg2Rad), Mathf.Sin((90 + rb.rotation) * Mathf.Deg2Rad), 0);
+        Vector3 direction = target.transform.position - transform.position;
+        Vector3 firingPosition = new Vector3(transform.position.x + 2 * direction.normalized.x, transform.position.y + 2 * direction.normalized.y, 0);
+
+        RaycastHit2D hit = Physics2D.Raycast(firingPosition, direction);
+
+        // Checks if its a hit that's not the ship itself
+        if (hit.collider != null
+            && hit.collider.transform != transform
+            && hit.collider.transform.parent != transform
+            && hit.collider.transform != target.transform)
+        {
+            //float distance = (hit.collider.transform.position - transform.position).magnitude;
+
+            Debug.DrawRay(firingPosition, direction.normalized * hit.distance, Color.red);
+        }
+        else if (hit.collider.transform == target.transform)
+        {
+            Debug.DrawRay(firingPosition, direction.normalized * hit.distance, Color.green);
+        }
+        else
+        {
+            //Debug.DrawRay(transform.position + direction * 2, direction * maxRange, Color.red);
+            Debug.DrawRay(firingPosition, direction.normalized, Color.yellow);
+        }
     }
 
     void AngularStabilizer()
