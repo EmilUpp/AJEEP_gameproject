@@ -7,7 +7,7 @@ public class orbitAroundBody : MonoBehaviour
 {
     public Transform bodyToOrbit;
     public float speed;
-    public float speedFactor = 1;
+    public float speedFactor = 1f;
 
     public bool setDistance;
     public float desiredDistance;
@@ -38,7 +38,7 @@ public class orbitAroundBody : MonoBehaviour
 
             // Adds the distance to the orbited body, offset by angle
             transform.position = new Vector2(bodyToOrbit.position.x + desiredDistance * -Mathf.Cos(angle), 
-                                            bodyToOrbit.position.y + desiredDistance * -Mathf.Sin(angle));
+                                             bodyToOrbit.position.y + desiredDistance * -Mathf.Sin(angle));
         }
     }
 
