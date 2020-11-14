@@ -38,10 +38,25 @@ public class playerMovement : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(0, 0, 90 + Mathf.Atan2(closestPlanet.position.y - transform.position.y, closestPlanet.position.x - transform.position.x) * 180 / Mathf.PI);
         }
-
-        if(Input.GetAxisRaw("Horizontal") != 0 && Physics2D.OverlapCircle(groundCheck.transform.position, 0.1f, planetsLayer))
+    }
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Planet"))
         {
-            rb.AddRelativeForce(new Vector2(Input.GetAxisRaw("Horizontal"), 0));
+            transform.parent = collision.transform;
+
+            if (Input.GetAxisRaw("Horizontal") != 0)
+            {
+                rb.AddRelativeForce(new Vector2(Input.GetAxisRaw("Horizontal"), 0));
+            }
         }
     }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Planet"))
+        {
+            transform.parent = null;
+        }
+    }
+    
 }
