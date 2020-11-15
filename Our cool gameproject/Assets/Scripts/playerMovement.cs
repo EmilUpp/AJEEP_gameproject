@@ -20,43 +20,42 @@ public class playerMovement : MonoBehaviour
     void Update()
     {
 
-        // Find Closest Planet
-        Transform closestPlanet = null;
-        float minDist = Mathf.Infinity;
-        Vector3 currentPos = transform.position;
-        foreach (GameObject p in GameObject.FindGameObjectsWithTag("Planet"))
-        {
-            float dist = Vector3.Distance(p.transform.position, currentPos);
-            if (dist < minDist)
-            {
-                closestPlanet = p.transform;
-                minDist = dist;
-            }
-        }
-        // Rotate Player to stand upright
-        if(closestPlanet != null)
-        {
-            transform.rotation = Quaternion.Euler(0, 0, 90 + Mathf.Atan2(closestPlanet.position.y - transform.position.y, closestPlanet.position.x - transform.position.x) * 180 / Mathf.PI);
-        }
+        
     }
     private void OnCollisionStay2D(Collision2D collision)
     {
+        // If standing on planet
         if (collision.gameObject.CompareTag("Planet"))
         {
-            transform.parent = collision.transform;
-
+            // Walking
             if (Input.GetAxisRaw("Horizontal") != 0)
             {
                 rb.AddRelativeForce(new Vector2(Input.GetAxisRaw("Horizontal"), 0));
             }
         }
     }
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Planet"))
+        // Unparent player from planet while not in atmosphere
+        if (collision.gameObject.CompareTag("Atmosphere"))
         {
             transform.parent = null;
         }
     }
     
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        // If in atmosphere
+        if (collision.gameObject.CompareTag("Atmosphere"))
+        {
+            // Make player a child of the planet who's atmosphere they are within
+            transform.parent = collision.transform.parent;
+            
+            // Find planet of atmosphere (atmosphere's parent)
+            Transform closestPlanet = collision.transform.parent;
+
+            // Rotate Player to stand upright
+            transform.rotation = Quaternion.Euler(0, 0, 90 + Mathf.Atan2(closestPlanet.position.y - transform.position.y, closestPlanet.position.x - transform.position.x) * 180 / Mathf.PI);
+        }
+    }
 }
