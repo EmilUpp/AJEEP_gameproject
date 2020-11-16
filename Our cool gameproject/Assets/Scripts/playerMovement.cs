@@ -56,6 +56,9 @@ public class playerMovement : MonoBehaviour
 
             // Rotate Player to stand upright
             transform.rotation = Quaternion.Euler(0, 0, 90 + Mathf.Atan2(closestPlanet.position.y - transform.position.y, closestPlanet.position.x - transform.position.x) * 180 / Mathf.PI);
+
+            // Apply drag to player
+
         }
     }
 }
