@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4724392307251077681}
   - component: {fileID: 2240747160556548177}
   - component: {fileID: 560401853967651007}
+  - component: {fileID: 3268372638921932603}
   m_Layer: 8
   m_Name: Atmosphere
   m_TagString: Atmosphere
@@ -99,6 +100,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 5
+--- !u!114 &3268372638921932603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4530674055487599364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36736f547764d06458ef35ff015a6361, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5259658079932534677
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,6 +175,8 @@ MonoBehaviour:
   lacunarity: 2
   seed: 0
   generateSeed: 0
+  atmosphereScale: 0.3
+  atmosphereDensity: 1
   verticesAmount: 64
   vertices: []
   triangles: 

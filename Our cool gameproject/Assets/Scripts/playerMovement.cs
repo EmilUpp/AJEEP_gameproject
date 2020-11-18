@@ -39,7 +39,7 @@ public class playerMovement : MonoBehaviour
         // Unparent player from planet while not in atmosphere
         if (collision.gameObject.CompareTag("Atmosphere"))
         {
-            transform.parent = null;
+            //transform.parent = null;
         }
     }
     
@@ -49,16 +49,14 @@ public class playerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Atmosphere"))
         {
             // Make player a child of the planet who's atmosphere they are within
-            transform.parent = collision.transform.parent;
+            //transform.parent = collision.transform.parent;
             
             // Find planet of atmosphere (atmosphere's parent)
             Transform closestPlanet = collision.transform.parent;
 
             // Rotate Player to stand upright
             transform.rotation = Quaternion.Euler(0, 0, 90 + Mathf.Atan2(closestPlanet.position.y - transform.position.y, closestPlanet.position.x - transform.position.x) * 180 / Mathf.PI);
-
-            // Apply drag to player
-
+            
         }
     }
 }
