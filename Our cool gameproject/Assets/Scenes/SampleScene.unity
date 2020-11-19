@@ -432,8 +432,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40c59213f68974d44a401c8bf28720b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 10
-  jumpForce: 10
+  walkSpeed: 3
+  jumpForce: 1
   groundCheck: {fileID: 2078071901}
   planetsLayer:
     serializedVersion: 2

@@ -21,7 +21,12 @@ public class playerMovement : MonoBehaviour
     {
         if(Physics2D.OverlapCircle(groundCheck.transform.position, 0.01f, planetsLayer))
         {
-            rb.AddRelativeForce(new Vector2(Input.GetAxisRaw("Horizontal"), -0.3f));
+            rb.AddRelativeForce(new Vector2(Input.GetAxisRaw("Horizontal") * walkSpeed, -0.3f));
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                rb.AddRelativeForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+            }
         }
     }
     

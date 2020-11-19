@@ -45,7 +45,7 @@ public class atmosphereScript : MonoBehaviour
             
             if (Physics2D.OverlapCircle(collision.gameObject.transform.Find("Ground Check").transform.position, 0.01f, planetsLayer))
             {
-                collision.attachedRigidbody.velocity += reverseVector * heightRemapped;
+                collision.attachedRigidbody.velocity += reverseVector * 0.5f;
             }
             collision.attachedRigidbody.velocity += (reverseVector*heightRemapped*density) / 300;
             

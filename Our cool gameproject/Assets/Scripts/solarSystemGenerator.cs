@@ -102,7 +102,7 @@ public class solarSystemGenerator : MonoBehaviour
             newPlanet.GetComponent<planetScript>().InstanstiatePlanet();
             newPlanet.GetComponent<planetScript>().generatePlanet();
             newPlanet.GetComponent<planetScript>().diameter = (mainBody.GetComponent<planetScript>().diameter / 40) * Random.Range(0.5f, 1.5f);
-            newPlanet.GetComponent<planetScript>().density = Random.Range(50f, 80f);
+            newPlanet.GetComponent<planetScript>().density = Random.Range(80f, 120f);
             newPlanet.GetComponent<planetScript>().atmosphereDensity = Random.Range(0f, 1f);
 
             // set position, each planet gets expoentially further out
@@ -137,7 +137,7 @@ public class solarSystemGenerator : MonoBehaviour
             newPlanet.GetComponent<planetScript>().InstanstiatePlanet();
             newPlanet.GetComponent<planetScript>().generatePlanet();
             newPlanet.GetComponent<planetScript>().diameter = (mainBody.GetComponent<planetScript>().diameter / 4) * Random.Range(0.5f, 1.5f);
-            newPlanet.GetComponent<planetScript>().density = Random.Range(10f, 20f);
+            newPlanet.GetComponent<planetScript>().density = Random.Range(80f, 120f);
             newPlanet.GetComponent<planetScript>().atmosphereDensity = Random.Range(0f, 0.2f);
 
             // set position
