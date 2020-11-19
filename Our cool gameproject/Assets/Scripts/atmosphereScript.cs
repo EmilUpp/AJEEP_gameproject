@@ -10,6 +10,7 @@ public class atmosphereScript : MonoBehaviour
 
     public Vector2 velocity;
     public float density;
+    public LayerMask planetsLayer;
 
     // Start is called before the first frame update
     void Start()
@@ -35,11 +36,19 @@ public class atmosphereScript : MonoBehaviour
         if(collision.gameObject.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Dynamic && collision.gameObject.CompareTag("Player"))
         {
             float heightRemapped = -1 * Vector2.Distance(collision.transform.position, transform.position) / ((transform.lossyScale.x / 2)) + 10;
+            
             if(heightRemapped < 0)
             {
                 heightRemapped = 0;
             }
-            Debug.Log(heightRemapped);
+            Vector2 reverseVector = -new Vector2((collision.attachedRigidbody.velocity.x - velocity.x) / 5, (collision.attachedRigidbody.velocity.y - velocity.y) / 5);
+            
+            if (Physics2D.OverlapCircle(collision.gameObject.transform.Find("Ground Check").transform.position, 0.01f, planetsLayer))
+            {
+                collision.attachedRigidbody.velocity += reverseVector * heightRemapped;
+            }
+            collision.attachedRigidbody.velocity += (reverseVector*heightRemapped*density) / 300;
+            
         }
     }
 }
