@@ -153,9 +153,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planetPrefab: {fileID: 5259658079932534677, guid: 3092f256709f5f141a768569ad802193, type: 3}
-  numberOfPlanets: 5
+  numberOfPlanets: 3
   minMoonAmount: 0
-  maxMoonAmount: 6
+  maxMoonAmount: 3
   moonDepth: 0
   sun: {fileID: 0}
   newSystem: 0

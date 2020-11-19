@@ -9,13 +9,14 @@ public class atmosphereScript : MonoBehaviour
     private Vector2 newpos;
 
     public Vector2 velocity;
-
+    public float density;
 
     // Start is called before the first frame update
     void Start()
     {
         transform.localScale = new Vector3(transform.parent.GetComponent<planetScript>().atmosphereScale, transform.parent.GetComponent<planetScript>().atmosphereScale, 1);
         oldpos = transform.position;
+        density = transform.parent.GetComponent<planetScript>().atmosphereDensity;
     }
 
     // Update is called once per frame
@@ -33,10 +34,12 @@ public class atmosphereScript : MonoBehaviour
     {
         if(collision.gameObject.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Dynamic && collision.gameObject.CompareTag("Player"))
         {
-            float heightAbovePlanet = Vector2.Distance(collision.transform.position, transform.position) - (transform.parent.GetComponent<planetScript>().diameter / 2);
-            float height01 = heightAbovePlanet / (transform.lossyScale.x - (transform.parent.GetComponent<planetScript>().diameter / 2));
-            Debug.Log(velocity);
-            //Debug.Log(Mathf.Exp(height01 * transform.parent.GetComponent<planetScript>().atmosphereDensity) * (1 - height01)); 
+            float heightRemapped = -1 * Vector2.Distance(collision.transform.position, transform.position) / ((transform.lossyScale.x / 2)) + 10;
+            if(heightRemapped < 0)
+            {
+                heightRemapped = 0;
+            }
+            Debug.Log(heightRemapped);
         }
     }
 }
