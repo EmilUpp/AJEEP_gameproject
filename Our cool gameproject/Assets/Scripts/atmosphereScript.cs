@@ -18,6 +18,7 @@ public class atmosphereScript : MonoBehaviour
         transform.localScale = new Vector3(transform.parent.GetComponent<planetScript>().atmosphereScale, transform.parent.GetComponent<planetScript>().atmosphereScale, 1);
         oldpos = transform.position;
         density = transform.parent.GetComponent<planetScript>().atmosphereDensity;
+        GetComponent<SpriteRenderer>().color = new Color(0.6f, 0.9f, 1, density / 3);
     }
 
     // Update is called once per frame
