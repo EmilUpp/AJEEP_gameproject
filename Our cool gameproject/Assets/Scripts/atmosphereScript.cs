@@ -44,7 +44,7 @@ public class atmosphereScript : MonoBehaviour
             }
             Vector2 reverseVector = -new Vector2((collision.attachedRigidbody.velocity.x - velocity.x) / 5, (collision.attachedRigidbody.velocity.y - velocity.y) / 5);
             
-            if (Physics2D.OverlapCircle(collision.gameObject.transform.Find("Ground Check").transform.position, 0.01f, planetsLayer))
+            if (Physics2D.OverlapCircle(collision.gameObject.transform.Find("Ground Check").transform.position, 0.03f, planetsLayer))
             {
                 collision.attachedRigidbody.velocity += reverseVector * 0.5f;
             }

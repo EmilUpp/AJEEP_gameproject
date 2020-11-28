@@ -20,7 +20,7 @@ public class playerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Physics2D.OverlapCircle(groundCheck.transform.position, 0.01f, planetsLayer))
+        if(Physics2D.OverlapCircle(groundCheck.transform.position, 0.03f, planetsLayer))
         {
             canWalk = true;
 
