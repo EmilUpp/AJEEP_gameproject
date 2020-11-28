@@ -22,7 +22,7 @@ public class solarSystemGenerator : MonoBehaviour
     public int minMoonAmount;
     public int maxMoonAmount;
     public int moonDepth;
-    public GameObject sun;
+    private GameObject sun;
 
     public bool newSystem;
 

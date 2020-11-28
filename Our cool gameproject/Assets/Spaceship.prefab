@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3794211305143083395}
   - component: {fileID: 2853430053463426531}
   - component: {fileID: 3628164963137621597}
+  - component: {fileID: -7575527360084468788}
   m_Layer: 0
   m_Name: Spaceship
   m_TagString: Untagged
@@ -113,6 +114,27 @@ PolygonCollider2D:
       - {x: -0.5, y: 0.5}
       - {x: 0.5, y: 0.5}
       - {x: 0.5, y: -0.5}
+--- !u!50 &-7575527360084468788
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2736755096466471091}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &8598287598904439940
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,7 +146,7 @@ GameObject:
   - component: {fileID: 7285856437375949884}
   - component: {fileID: 1152712800154020608}
   - component: {fileID: 1972681423702311337}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
