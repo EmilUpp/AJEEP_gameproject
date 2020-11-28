@@ -5,14 +5,20 @@ using UnityEngine;
 public class PathFinder : MonoBehaviour
 {
     /*
+     * Generates a path consiting of vector points in space between two gameobjects
      * 
+     * baseSafeDistance, minumum distance to a object when finding a path
+     *      If the origin would be closer the safedistance will be set to distance of hit
+     *      
+     * debugDraw, set to true if the rays should be visible
      */
     public static List<Vector2> GeneratePathList(GameObject origin, GameObject target, float baseSafeDistance, bool debugDraw)
     {
         List<Vector2> pathList = new List<Vector2>();
+
+        // Current pos added for drawing purpose
         pathList.Add(origin.transform.position);
 
-        // Set currentOrigin to origin
         Vector2 currentOrigin = origin.transform.position;
 
         // Set current offset
@@ -22,25 +28,30 @@ public class PathFinder : MonoBehaviour
         // Fire ray against target
         RaycastHit2D hitObjectInPath = FindObjectInPath(currentOrigin, target, 0, baseSafeDistance, debugDraw);
         RaycastHit2D lastHit = hitObjectInPath;
+        bool targetFound = !hitObjectInPath.collider.gameObject == target;
 
         float timeAccumulator = 0;
 
         // While object in path
-        while (hitObjectInPath.collider != null && hitObjectInPath.collider.gameObject != target && timeAccumulator < 100)
+        while (!targetFound && timeAccumulator < 5)
         {
-            // To stop potential endless loop, needs fix
+            // To stop potential endless loop
             timeAccumulator += Time.deltaTime;
 
-            // TODO fix step and offset
             // Fire new ray offset by a step in radians
-            RaycastHit2D newHit = FindObjectInPath(currentOrigin, target, currentOffset, baseSafeDistance, debugDraw);
+            hitObjectInPath = FindObjectInPath(currentOrigin, target, currentOffset, baseSafeDistance, debugDraw);
+
+            // Check if not target in the way
+            if (hitObjectInPath.collider != null && hitObjectInPath.collider.gameObject == target)
+            {
+                targetFound = true;
+            }
 
             // If if object still in path
-            if (newHit.collider != null && newHit.collider.gameObject == lastHit.collider.gameObject)
+            if (hitObjectInPath.collider != null && hitObjectInPath.collider.gameObject == lastHit.collider.gameObject)
             {
                 // Save hit as lastHit (for use later)
-                lastHit = newHit;
-
+                lastHit = hitObjectInPath;
                 currentOffset += step;
             }
 
@@ -50,23 +61,17 @@ public class PathFinder : MonoBehaviour
                 // Add the normal multiplied by safedistance to point
                 Vector2 newPoint = lastHit.point + lastHit.normal * baseSafeDistance;
 
-                // Add offset point to PathList
+                // Makes sure to remove duplet points
                 if (!pathList.Contains(newPoint))
                 {
                     pathList.Add(newPoint);
                 }
 
-                // Set point to current origin
+                // Set point to current origin and reset offset
                 currentOrigin = newPoint;
-
                 currentOffset = 0;
             }
 
-        }
-
-        if (timeAccumulator > 25)
-        {
-            Debug.Log(timeAccumulator);
         }
 
         pathList.Add(target.transform.position);
