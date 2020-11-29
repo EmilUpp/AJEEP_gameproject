@@ -14,10 +14,8 @@ public class PathFinder : MonoBehaviour
      */
     public static List<Vector2> GeneratePathList(GameObject origin, GameObject target, float baseSafeDistance, bool debugDraw)
     {
+        // Innit with current pos for drawing purpose
         List<Vector2> pathList = new List<Vector2>();
-
-        // Current pos added for drawing purpose
-        pathList.Add(origin.transform.position);
 
         Vector2 currentOrigin = origin.transform.position;
 
