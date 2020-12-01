@@ -9,6 +9,9 @@ public class cameraScript : MonoBehaviour
 
     Transform player;
 
+    [HideInInspector]
+    public bool inAtmosphere;
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -17,12 +20,16 @@ public class cameraScript : MonoBehaviour
     void Update()
     {
         posSmoothness = Vector2.Distance(transform.position, player.position) * 2 + 3;
-        Debug.Log(posSmoothness);
+        
 
         Vector3 desPos = player.position + new Vector3(0, 0, -10);
         transform.position = Vector3.Lerp(transform.position, desPos, posSmoothness * Time.deltaTime);
 
-        Quaternion desRot = player.rotation;
+        Quaternion desRot;
+
+        if (inAtmosphere) desRot = player.rotation;
+        else desRot = Quaternion.Euler(0, 0, 0);
+
         transform.rotation = Quaternion.Slerp(transform.rotation, desRot, rotSmoothness * Time.deltaTime);
     }
 }

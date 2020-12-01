@@ -9,7 +9,10 @@ public class playerMovement : MonoBehaviour
     public GameObject groundCheck;
     public LayerMask planetsLayer;
     private Rigidbody2D rb;
-    private bool canWalk;
+
+    [HideInInspector]
+    public bool canWalk;
+    
     
     // Start is called before the first frame update
     void Start()
@@ -20,7 +23,7 @@ public class playerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Physics2D.OverlapCircle(groundCheck.transform.position, 0.03f, planetsLayer))
+        if(Physics2D.OverlapCircle(groundCheck.transform.position, 0.05f, planetsLayer))
         {
             canWalk = true;
 
@@ -33,6 +36,7 @@ public class playerMovement : MonoBehaviour
         {
             canWalk = false;
         }
+        
     }
 
     private void FixedUpdate()
@@ -49,11 +53,14 @@ public class playerMovement : MonoBehaviour
         // If in atmosphere
         if (collision.gameObject.CompareTag("Atmosphere"))
         {
+            
+
             // Find planet of atmosphere (atmosphere's parent)
             Transform closestPlanet = collision.transform.parent;
 
             // Rotate Player to stand upright
             transform.rotation = Quaternion.Euler(0, 0, 90 + Mathf.Atan2(closestPlanet.position.y - transform.position.y, closestPlanet.position.x - transform.position.x) * 180 / Mathf.PI);
         }
+        
     }
 }
