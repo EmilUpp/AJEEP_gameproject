@@ -96,7 +96,7 @@ public class SpaceshipController : MonoBehaviour
 
         if (pathPointList.Count > 0)
         {
-            FollowPath(pathPointList, 5, 50);
+            FollowPath(pathPointList, 5, 3);
         }
 
         if (angularStabilizerOn)
@@ -118,12 +118,12 @@ public class SpaceshipController : MonoBehaviour
         // Trimm controls
         if (Input.GetAxis("Vertical") != 0)
         {
-            FireVerticalTrimEngines();
+            FireVerticalTrimEngines(Input.GetAxis("Vertical"));
         }
 
         if (Input.GetAxis("Horizontal") != 0)
         {
-            FireHorizontalTrimEngines();
+            FireHorizontalTrimEngines(Input.GetAxis("Horizontal"));
         }
 
         // Rotation controls
@@ -143,18 +143,18 @@ public class SpaceshipController : MonoBehaviour
         }
     }
 
-    void FireVerticalTrimEngines()
+    void FireVerticalTrimEngines(float direction)
     {
-        rb.AddForce(new Vector2(Input.GetAxis("Vertical") * trimmThrust * Mathf.Cos((90 + rb.rotation) * Mathf.Deg2Rad),
-                                Input.GetAxis("Vertical") * trimmThrust * Mathf.Sin((90 + rb.rotation) * Mathf.Deg2Rad)));
+        rb.AddForce(new Vector2(direction * trimmThrust * Mathf.Cos((90 + rb.rotation) * Mathf.Deg2Rad),
+                                direction * trimmThrust * Mathf.Sin((90 + rb.rotation) * Mathf.Deg2Rad)));
 
         fuel -= (trimmThrust / 2500);
     }
 
-    void FireHorizontalTrimEngines()
+    void FireHorizontalTrimEngines(float direction)
     {
-        rb.AddForce(new Vector2(Input.GetAxis("Horizontal") * trimmThrust * Mathf.Cos((rb.rotation) * Mathf.Deg2Rad),
-                                Input.GetAxis("Horizontal") * trimmThrust * Mathf.Sin((rb.rotation) * Mathf.Deg2Rad)));
+        rb.AddForce(new Vector2(direction * trimmThrust * Mathf.Cos((rb.rotation) * Mathf.Deg2Rad),
+                                direction * trimmThrust * Mathf.Sin((rb.rotation) * Mathf.Deg2Rad)));
 
         fuel -= (trimmThrust / 2500);
     }
@@ -254,28 +254,47 @@ public class SpaceshipController : MonoBehaviour
             return;
         }
 
-        else
-        {
-            // Else call rotate towards point
-            RotateTowardsPoint(nextPoint);
+        // Else call rotate towards point
+        RotateTowardsPoint(nextPoint);
 
-            //Debug.Log(nextPoint);
-            //Debug.Log(Vector2.Distance(transform.position, nextPoint));
-        }
 
-        // If speed is less than cruise speed accelerate
-        if (rb.velocity.magnitude < cruiseSpeed)
+        Vector2 dirToPoint = nextPoint - new Vector2(transform.position.x, transform.position.y);
+        
+        // Calcluates how much of the velocity is towards the target
+        float dirFactor = Vector2.Dot(dirToPoint.normalized, rb.velocity.normalized);
+
+
+        float[] angleAndRotation = GetRotationAndAngleToPoint(transform, nextPoint);
+        float angleDifference = Mathf.Abs(angleAndRotation[0] - angleAndRotation[1]);
+
+        // Accelerates if speed is lowwer than set speed
+        if (rb.velocity.magnitude * dirFactor < cruiseSpeed && angleDifference < 30)
         {
             FireForwardThrust();
         }
+
+        // This section calculates and counteract circular motion by firing side thrusters
+        float angleToVelocity = Vector2.SignedAngle(dirToPoint.normalized, rb.velocity.normalized);
+
+        // Left
+        if (angleToVelocity > 0)
+        {
+            FireHorizontalTrimEngines(1);
+        }
+        // Right
+        else if (angleToVelocity < 0)
+        {
+            FireHorizontalTrimEngines(-1);
+        }
+
     }
 
-    
+    /*
+     * 
+     */
     void RotateTowardsPoint(Vector2 point)
     {
-        //float angleToPoint = Mathf.Atan2(point.y - transform.position.y, point.x - transform.position.x) * Mathf.Rad2Deg - 90;
-        //float currentAngle = transform.eulerAngles.z;
-
+        /*
         float angleToPoint = Mathf.Atan2(point.y-transform.position.y, point.x - transform.position.x) * Mathf.Rad2Deg;
 
         float currentAngle = transform.eulerAngles.z + 90;
@@ -284,29 +303,55 @@ public class SpaceshipController : MonoBehaviour
         currentAngle %= 360;
         if (currentAngle > 180)
             currentAngle -= 360;
+        */
 
-        Debug.Log(angleToPoint + " " + currentAngle);
+        float[] angleAndRotation = GetRotationAndAngleToPoint(transform, point);
 
-        /*
-        if (angleToPoint - currentAngle < 30)
+        float angleToPoint = angleAndRotation[0];
+        float currentAngle = angleAndRotation[1];
+
+        //Debug.Log(angleToPoint + " " + currentAngle);
+
+        if (Mathf.Abs(currentAngle - angleToPoint) < 30)
         {
             AngularStabilizer();
         }
-        */
 
-        //Debug.Log(angleToPoint - currentAngle);
+        float angleDifference = currentAngle - angleToPoint;
 
-        if (angleToPoint > currentAngle)
+        //Debug.Log(angleDifference);
+        
+        // Left
+        if (angleDifference < 0 && angleDifference >= -180)
+        {
+            RotateLeft(1.1f);
+        }
+        // Right
+        else if (angleDifference <= 180 || angleDifference < -180)
+        {
+            RotateRight(1.1f);
+        }
+        // Left
+        else if (angleDifference > 180)
         {
             RotateLeft(1.2f);
         }
 
-        if (angleToPoint < currentAngle)
-        {
-            RotateRight(1.2f);
-        }
     }
 
+    static float[] GetRotationAndAngleToPoint(Transform objectTransform, Vector2 point)
+    {
+        float angleToPoint = Mathf.Atan2(point.y - objectTransform.position.y, point.x - objectTransform.position.x) * Mathf.Rad2Deg;
+
+        float currentAngle = objectTransform.eulerAngles.z + 90;
+
+        // Wraps the angle to 180 -> -180
+        currentAngle %= 360;
+        if (currentAngle > 180)
+            currentAngle -= 360;
+
+        return new float[] { angleToPoint, currentAngle };
+    }
 
     /*
      * Counteracts all angular velocity to help fly straighter
