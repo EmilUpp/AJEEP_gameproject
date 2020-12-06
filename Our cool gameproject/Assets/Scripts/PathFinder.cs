@@ -25,6 +25,15 @@ public class PathFinder : MonoBehaviour
 
         // Fire ray against target
         RaycastHit2D hitObjectInPath = FindObjectInPath(currentOrigin, target, 0, baseSafeDistance, debugDraw);
+
+        // If target was out of range
+        if (hitObjectInPath.collider == null)
+        {
+            pathList.Add(target.transform.position);
+
+            return pathList;
+        }
+
         RaycastHit2D lastHit = hitObjectInPath;
         bool targetFound = !hitObjectInPath.collider.gameObject == target;
 

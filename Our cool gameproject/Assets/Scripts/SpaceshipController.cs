@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 /*
  * Class for handling the spaceships movement
@@ -33,6 +34,10 @@ public class SpaceshipController : MonoBehaviour
     [Header("Autopilot")]
     public GameObject target;
     public float baseSafeDistance = 10;
+    public float cruiseSpeed = 5;
+
+    public float speed;
+    public float speedTowardsTarget;
     private bool angularStabilizerOn;
     public List<Vector2> pathPointList;
 
@@ -49,6 +54,11 @@ public class SpaceshipController : MonoBehaviour
         fuel = fuelCapacity;
 
         angularStabilizerOn = false;
+
+        if (target != null)
+        {
+            StartCoroutine(nameof(UpdatePath), 3);
+        }
     }
 
     // Update is called once per frame
@@ -68,8 +78,7 @@ public class SpaceshipController : MonoBehaviour
 
         if (target != null)
         {
-            pathPointList = PathFinder.GeneratePathList(gameObject, target, baseSafeDistance, showRays);
-
+            //pathPointList = PathFinder.GeneratePathList(gameObject, target, baseSafeDistance, showRays);
 
             //Debug.Log("The path is " + pathPointList.Count + " nodes long");
 
@@ -77,7 +86,6 @@ public class SpaceshipController : MonoBehaviour
                 DebugDrawPath(pathPointList);
             }
         }
-
     }
 
     /*
@@ -96,17 +104,12 @@ public class SpaceshipController : MonoBehaviour
 
         if (pathPointList.Count > 0)
         {
-            FollowPath(pathPointList, 5, 3);
+            FollowPath(pathPointList, 5, cruiseSpeed);
         }
 
         if (angularStabilizerOn)
         {
             AngularStabilizer();
-        }
-
-        if (fuel < 0)
-        {
-            fuel = 0;
         }
     }
 
@@ -129,11 +132,11 @@ public class SpaceshipController : MonoBehaviour
         // Rotation controls
         if (Input.GetKey(KeyCode.Q))
         {
-            RotateLeft();
+            RotateSpaceship(1);
         }
         if (Input.GetKey(KeyCode.E))
         {
-            RotateRight();
+            RotateSpaceship(-1);
         }
 
         // Main engine controls
@@ -159,38 +162,25 @@ public class SpaceshipController : MonoBehaviour
         fuel -= (trimmThrust / 2500);
     }
 
-    void RotateLeft()
+    void RotateSpaceship(float direction)
     {
         float rotation = rotationalThrust;
-        rb.AddTorque(rotation);
+        rb.AddTorque(rotation * direction);
 
         fuel -= (rotationalThrust / 2500);
     }
 
-    void RotateLeft(float powerFactor)
-    {
-        float rotation = rotationalThrust * powerFactor;
-        rb.AddTorque(rotation);
-
-        fuel -= (rotationalThrust * powerFactor / 2500);
-    }
-
-    void RotateRight()
+    /*
+     * Rotates the spaceship
+     * direction of 1 means left
+     * Direction of -1 means right
+     */
+    void RotateSpaceship(float direction, float powerFactor)
     {
         float rotation = rotationalThrust;
-        rb.AddTorque(-rotation);
+        rb.AddTorque(rotation * direction * powerFactor);
 
         fuel -= (rotationalThrust / 2500);
-
-    }
-
-    void RotateRight(float powerFactor)
-    {
-        float rotation = rotationalThrust * powerFactor;
-        rb.AddTorque(-rotation);
-
-        fuel -= (rotationalThrust * powerFactor / 2500);
-
     }
 
     void FireForwardThrust()
@@ -201,8 +191,29 @@ public class SpaceshipController : MonoBehaviour
         fuel -= (forwardThrust / 1000);
     }
 
+    /*
+     * Only updates the path every seconds
+     */
+    IEnumerator UpdatePath(int updateRate)
+    {
+        while(true)
+        {
+            pathPointList = PathFinder.GeneratePathList(gameObject, target, baseSafeDistance, showRays);
+
+            yield return new WaitForSeconds(updateRate);
+        }
+    }
+
+    /*
+     * Draws a line between points in space
+     */
     void DebugDrawPath(List<Vector2> pathList)
     {
+        if (pathList.Count == 0)
+        {
+            return;
+        }
+
         Debug.DrawLine(transform.position, pathList[0], Color.green);
         for (int i=0; i < pathList.Count - 1; i++)
         {
@@ -226,7 +237,6 @@ public class SpaceshipController : MonoBehaviour
             && hit.collider.transform.parent != transform
             && hit.collider.transform != target.transform)
         {
-            //float distance = (hit.collider.transform.position - transform.position).magnitude;
 
             Debug.DrawRay(firingPosition, direction.normalized * hit.distance, Color.red);
         }
@@ -241,7 +251,15 @@ public class SpaceshipController : MonoBehaviour
         }
     }
 
-    
+    /*
+     * Make the spaceship follow a list of points in space by firing it's thrusters
+     * 
+     * pointList: List of points to follow
+     * 
+     * proximityThreshold: How close the spaceship needs to be a point in order to have "reached it"
+     * 
+     * cruiseSpeed: The maximum speed towards the target
+     */
     void FollowPath(List<Vector2> pointList, float proximityThreshold, float cruiseSpeed)
     {
         Vector2 nextPoint = pointList[0];
@@ -267,6 +285,9 @@ public class SpaceshipController : MonoBehaviour
         float[] angleAndRotation = GetRotationAndAngleToPoint(transform, nextPoint);
         float angleDifference = Mathf.Abs(angleAndRotation[0] - angleAndRotation[1]);
 
+        speedTowardsTarget = rb.velocity.magnitude * dirFactor;
+        speed = rb.velocity.magnitude;
+
         // Accelerates if speed is lowwer than set speed
         if (rb.velocity.magnitude * dirFactor < cruiseSpeed && angleDifference < 30)
         {
@@ -290,21 +311,10 @@ public class SpaceshipController : MonoBehaviour
     }
 
     /*
-     * 
+     * Rotates the gameobject towards a point in space
      */
     void RotateTowardsPoint(Vector2 point)
     {
-        /*
-        float angleToPoint = Mathf.Atan2(point.y-transform.position.y, point.x - transform.position.x) * Mathf.Rad2Deg;
-
-        float currentAngle = transform.eulerAngles.z + 90;
-
-        // Wraps the angle to 180 -> -180
-        currentAngle %= 360;
-        if (currentAngle > 180)
-            currentAngle -= 360;
-        */
-
         float[] angleAndRotation = GetRotationAndAngleToPoint(transform, point);
 
         float angleToPoint = angleAndRotation[0];
@@ -312,33 +322,39 @@ public class SpaceshipController : MonoBehaviour
 
         //Debug.Log(angleToPoint + " " + currentAngle);
 
+        // This helps to deaccelerate and reduce wobbling
         if (Mathf.Abs(currentAngle - angleToPoint) < 30)
         {
             AngularStabilizer();
         }
 
         float angleDifference = currentAngle - angleToPoint;
-
-        //Debug.Log(angleDifference);
         
         // Left
         if (angleDifference < 0 && angleDifference >= -180)
         {
-            RotateLeft(1.1f);
+            RotateSpaceship(1, 1.05f);
         }
         // Right
         else if (angleDifference <= 180 || angleDifference < -180)
         {
-            RotateRight(1.1f);
+            RotateSpaceship(-1, 1.05f);
         }
         // Left
         else if (angleDifference > 180)
         {
-            RotateLeft(1.2f);
+            RotateSpaceship(1, 1.05f);
         }
 
     }
 
+    /*
+     * Calcuates the angle to point in space and own rotation
+     * 
+     * return float[angleToPoint, currentAngle]
+     * 
+     * both values are in range 180 -> -180
+     */
     static float[] GetRotationAndAngleToPoint(Transform objectTransform, Vector2 point)
     {
         float angleToPoint = Mathf.Atan2(point.y - objectTransform.position.y, point.x - objectTransform.position.x) * Mathf.Rad2Deg;
@@ -360,12 +376,12 @@ public class SpaceshipController : MonoBehaviour
     {
         if (rb.angularVelocity < 0)
         {
-            RotateLeft();
+            RotateSpaceship(1);
         }
 
         if (rb.angularVelocity > 0)
         {
-            RotateRight();
+            RotateSpaceship(-1);
         }
     }
 
