@@ -13,34 +13,28 @@ public class playerMovement : MonoBehaviour
     [HideInInspector]
     public bool canWalk;
     
-    
-    // Start is called before the first frame update
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
-        if(Physics2D.OverlapCircle(groundCheck.transform.position, 0.05f, planetsLayer))
+        // Ground Check and jump
+        if (Physics2D.OverlapCircle(groundCheck.transform.position, 0.05f, planetsLayer))
         {
             canWalk = true;
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                rb.AddRelativeForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-            }
+            if (Input.GetKeyDown(KeyCode.Space)) rb.AddRelativeForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
-        else
-        {
-            canWalk = false;
-        }
+        else canWalk = false;
         
     }
 
     private void FixedUpdate()
     {
+        // Walk if able to walk
         if (canWalk)
         {
             rb.AddRelativeForce(new Vector2(Input.GetAxisRaw("Horizontal") * walkSpeed, -0.3f), ForceMode2D.Force);
@@ -54,7 +48,6 @@ public class playerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Atmosphere"))
         {
             
-
             // Find planet of atmosphere (atmosphere's parent)
             Transform closestPlanet = collision.transform.parent;
 
