@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 
 /*
- * Class for handling the spaceships movement
+ * Class for handling the spaceships input controls and pathfinding
  * 
  * rotationalThrust, how fast it can rotate
  * 
@@ -21,6 +21,7 @@ public class SpaceshipController : MonoBehaviour
     public float rotationalThrust;
     public float trimmThrust;
     public float forwardThrust;
+    public SpaceshipEngine engine;
 
     [Header("Cargo")]
     public float fuelCapacity;
@@ -45,13 +46,20 @@ public class SpaceshipController : MonoBehaviour
     public bool showPath;
     public bool showRays;
 
-    private Rigidbody2D rb;
+    [HideInInspector]
+    public Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
         fuel = fuelCapacity;
+        engine = new SpaceshipEngine(this, trimmThrust, rotationalThrust, forwardThrust, fuelCapacity);
+
+        // Use this if component
+        //engine = gameObject.AddComponent<SpaceshipEngine>();
+        //engine = GetComponent<SpaceshipEngine>();
 
         angularStabilizerOn = false;
 
@@ -93,7 +101,7 @@ public class SpaceshipController : MonoBehaviour
      */
     void FixedUpdate()
     {
-        rb.mass = shipMass + fuel/10f + load;
+        rb.mass = shipMass + fuel/100f + load;
 
         if (load > loadCapacity)
         {
@@ -121,74 +129,29 @@ public class SpaceshipController : MonoBehaviour
         // Trimm controls
         if (Input.GetAxis("Vertical") != 0)
         {
-            FireVerticalTrimEngines(Input.GetAxis("Vertical"));
+            engine.FireVerticalTrimEngines(Input.GetAxis("Vertical"));
         }
 
         if (Input.GetAxis("Horizontal") != 0)
         {
-            FireHorizontalTrimEngines(Input.GetAxis("Horizontal"));
+            engine.FireHorizontalTrimEngines(Input.GetAxis("Horizontal"));
         }
 
         // Rotation controls
         if (Input.GetKey(KeyCode.Q))
         {
-            RotateSpaceship(1);
+            engine.RotateSpaceship(1);
         }
         if (Input.GetKey(KeyCode.E))
         {
-            RotateSpaceship(-1);
+            engine.RotateSpaceship(-1);
         }
 
         // Main engine controls
         if (Input.GetKey(KeyCode.Space) && fuel > 0)
         {
-            FireForwardThrust();
+            engine.FireForwardThrust();
         }
-    }
-
-    void FireVerticalTrimEngines(float direction)
-    {
-        rb.AddForce(new Vector2(direction * trimmThrust * Mathf.Cos((90 + rb.rotation) * Mathf.Deg2Rad),
-                                direction * trimmThrust * Mathf.Sin((90 + rb.rotation) * Mathf.Deg2Rad)));
-
-        fuel -= (trimmThrust / 2500);
-    }
-
-    void FireHorizontalTrimEngines(float direction)
-    {
-        rb.AddForce(new Vector2(direction * trimmThrust * Mathf.Cos((rb.rotation) * Mathf.Deg2Rad),
-                                direction * trimmThrust * Mathf.Sin((rb.rotation) * Mathf.Deg2Rad)));
-
-        fuel -= (trimmThrust / 2500);
-    }
-
-    void RotateSpaceship(float direction)
-    {
-        float rotation = rotationalThrust;
-        rb.AddTorque(rotation * direction);
-
-        fuel -= (rotationalThrust / 2500);
-    }
-
-    /*
-     * Rotates the spaceship
-     * direction of 1 means left
-     * Direction of -1 means right
-     */
-    void RotateSpaceship(float direction, float powerFactor)
-    {
-        float rotation = rotationalThrust;
-        rb.AddTorque(rotation * direction * powerFactor);
-
-        fuel -= (rotationalThrust / 2500);
-    }
-
-    void FireForwardThrust()
-    {
-        rb.AddForce(new Vector2(forwardThrust * Mathf.Cos((90 + rb.rotation) * Mathf.Deg2Rad),
-                        forwardThrust * Mathf.Sin((90 + rb.rotation) * Mathf.Deg2Rad)));
-
-        fuel -= (forwardThrust / 1000);
     }
 
     /*
@@ -218,36 +181,6 @@ public class SpaceshipController : MonoBehaviour
         for (int i=0; i < pathList.Count - 1; i++)
         {
             Debug.DrawLine(pathList[i], pathList[i + 1], Color.green);
-        }
-    }
-
-    void CastRay(GameObject target)
-    {
-        // Calculates the direction to fire the ray
-        Vector3 direction = target.transform.position - transform.position;
-
-        // Offset the fire positin to avoid starting inside the spaceship
-        Vector3 firingPosition = new Vector3(transform.position.x + 2 * direction.normalized.x, transform.position.y + 2 * direction.normalized.y, 0);
-
-        RaycastHit2D hit = Physics2D.Raycast(firingPosition, direction);
-
-        // Checks if its a hit that's not the ship itself
-        if (hit.collider != null
-            && hit.collider.transform != transform
-            && hit.collider.transform.parent != transform
-            && hit.collider.transform != target.transform)
-        {
-
-            Debug.DrawRay(firingPosition, direction.normalized * hit.distance, Color.red);
-        }
-        else if (hit.collider.transform == target.transform)
-        {
-            Debug.DrawRay(firingPosition, direction.normalized * hit.distance, Color.green);
-        }
-        else
-        {
-            //Debug.DrawRay(transform.position + direction * 2, direction * maxRange, Color.red);
-            Debug.DrawRay(firingPosition, direction.normalized, Color.yellow);
         }
     }
 
@@ -291,7 +224,7 @@ public class SpaceshipController : MonoBehaviour
         // Accelerates if speed is lowwer than set speed
         if (rb.velocity.magnitude * dirFactor < cruiseSpeed && angleDifference < 30)
         {
-            FireForwardThrust();
+            engine.FireForwardThrust();
         }
 
         // This section calculates and counteract circular motion by firing side thrusters
@@ -300,18 +233,20 @@ public class SpaceshipController : MonoBehaviour
         // Left
         if (angleToVelocity > 0)
         {
-            FireHorizontalTrimEngines(1);
+            engine.FireHorizontalTrimEngines(1);
         }
         // Right
         else if (angleToVelocity < 0)
         {
-            FireHorizontalTrimEngines(-1);
+            engine.FireHorizontalTrimEngines(-1);
         }
 
     }
 
     /*
-     * Rotates the gameobject towards a point in space
+     * Rotates the spaceship towards a point in space
+     * 
+     * Uses the AngularStabilizer() to minimize wobbling by counteracting the turning
      */
     void RotateTowardsPoint(Vector2 point)
     {
@@ -320,30 +255,30 @@ public class SpaceshipController : MonoBehaviour
         float angleToPoint = angleAndRotation[0];
         float currentAngle = angleAndRotation[1];
 
-        //Debug.Log(angleToPoint + " " + currentAngle);
 
         // This helps to deaccelerate and reduce wobbling
-        if (Mathf.Abs(currentAngle - angleToPoint) < 30)
+        if (Mathf.Abs(currentAngle - angleToPoint) < 90)
         {
             AngularStabilizer();
         }
 
         float angleDifference = currentAngle - angleToPoint;
-        
+
+        // Adds an addional powerfactor to prevent the AngularStabilizer to stop it completely
         // Left
         if (angleDifference < 0 && angleDifference >= -180)
         {
-            RotateSpaceship(1, 1.05f);
+            engine.RotateSpaceship(1, 1.1f);
         }
         // Right
         else if (angleDifference <= 180 || angleDifference < -180)
         {
-            RotateSpaceship(-1, 1.05f);
+            engine.RotateSpaceship(-1, 1.1f);
         }
         // Left
         else if (angleDifference > 180)
         {
-            RotateSpaceship(1, 1.05f);
+            engine.RotateSpaceship(1, 1.1f);
         }
 
     }
@@ -359,6 +294,7 @@ public class SpaceshipController : MonoBehaviour
     {
         float angleToPoint = Mathf.Atan2(point.y - objectTransform.position.y, point.x - objectTransform.position.x) * Mathf.Rad2Deg;
 
+        // Offsets 90 because of prefab orientation
         float currentAngle = objectTransform.eulerAngles.z + 90;
 
         // Wraps the angle to 180 -> -180
@@ -370,18 +306,19 @@ public class SpaceshipController : MonoBehaviour
     }
 
     /*
-     * Counteracts all angular velocity to help fly straighter
+     * Counteracts angular velocity to make it easier to fly straight
+     * and reduce wobbling when autopilot is on
      */
     void AngularStabilizer()
     {
         if (rb.angularVelocity < 0)
         {
-            RotateSpaceship(1);
+            engine.RotateSpaceship(1);
         }
 
         if (rb.angularVelocity > 0)
         {
-            RotateSpaceship(-1);
+            engine.RotateSpaceship(-1);
         }
     }
 

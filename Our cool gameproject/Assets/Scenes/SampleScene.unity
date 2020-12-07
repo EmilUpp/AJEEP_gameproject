@@ -193,11 +193,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3794211305143083395, guid: 3a7aa5685df87ff4d900e71744062a3f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 52.6
+      value: 43
       objectReference: {fileID: 0}
     - target: {fileID: 3794211305143083395, guid: 3a7aa5685df87ff4d900e71744062a3f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.1
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3794211305143083395, guid: 3a7aa5685df87ff4d900e71744062a3f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -257,7 +257,7 @@ MonoBehaviour:
   rotationalThrust: 3
   trimmThrust: 3
   forwardThrust: 5
-  fuelCapacity: 100
+  fuelCapacity: 1000
   fuel: 0
   loadCapacity: 50
   load: 15
@@ -270,6 +270,7 @@ MonoBehaviour:
   pathPointList: []
   showPath: 1
   showRays: 1
+  rb: {fileID: 0}
 --- !u!96 &320485046
 TrailRenderer:
   serializedVersion: 2
