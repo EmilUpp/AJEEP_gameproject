@@ -111,12 +111,12 @@ public class PathFinder : MonoBehaviour
         {
             if (debugDraw)
             {
-                Debug.DrawRay(originPosition, direction.normalized * hit.distance, Color.red);
+                Debug.DrawRay(originPosition, direction.normalized * hit.distance, Color.red, 3);
 
                 float safeDistance = Mathf.Min(baseSafeDistance, hit.distance);
 
                 // Shoots ray perpendicular to surface hit using the hit's normal
-                Debug.DrawRay(originPosition + direction.normalized * hit.distance, hit.normal.normalized * safeDistance, Color.blue);
+                Debug.DrawRay(originPosition + direction.normalized * hit.distance, hit.normal.normalized * safeDistance, Color.blue, 3);
             }
         }
         // If it's the target
@@ -125,14 +125,14 @@ public class PathFinder : MonoBehaviour
         {
             if (debugDraw)
             {
-              Debug.DrawRay(originPosition, direction.normalized * Vector2.Distance(originPosition, target.transform.position), Color.cyan);
+              Debug.DrawRay(originPosition, direction.normalized * Vector2.Distance(originPosition, target.transform.position), Color.cyan, 3);
             }
         }
         else
         {
             if (debugDraw)
             {
-                Debug.DrawRay(originPosition, direction.normalized * maxDistance, Color.yellow);
+                Debug.DrawRay(originPosition, direction.normalized * maxDistance, Color.yellow, 3);
             }
         }
 

@@ -41,6 +41,7 @@ public class SpaceshipController : MonoBehaviour
     public float speedTowardsTarget;
     private bool angularStabilizerOn;
     public List<Vector2> pathPointList;
+    private bool isPathfinding;
 
     [Header("Debug")]
     public bool showPath;
@@ -93,6 +94,11 @@ public class SpaceshipController : MonoBehaviour
             if (showPath) {
                 DebugDrawPath(pathPointList);
             }
+        }
+
+        if (!isPathfinding && target != null)
+        {
+            StartCoroutine(nameof(UpdatePath), 3);
         }
     }
 
@@ -159,6 +165,7 @@ public class SpaceshipController : MonoBehaviour
      */
     IEnumerator UpdatePath(int updateRate)
     {
+        isPathfinding = true;
         while(true)
         {
             pathPointList = PathFinder.GeneratePathList(gameObject, target, baseSafeDistance, showRays);
@@ -200,7 +207,6 @@ public class SpaceshipController : MonoBehaviour
         // Check if closer than threshold to first point in list
         if (Vector2.Distance(transform.position, nextPoint) < proximityThreshold)
         {
-            Debug.Log("Point " + nextPoint + " reached");
             pointList.RemoveAt(0);
             return;
         }
