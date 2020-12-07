@@ -16,15 +16,17 @@ public class planetColliderScript : MonoBehaviour
         polyCollider = GetComponent<PolygonCollider2D>();
         mesh = GetComponent<MeshFilter>().mesh;
         polyCollider.pathCount = 1;
+
+        recalcuateCollider();
     }
 
-    void Update()
+    public void recalcuateCollider()
     {
         // Add the vertice to the polygon path list
         polyCollider.SetPath(0, Vector3ArrayToVector2(mesh.vertices));
     }
 
-    Vector2[] Vector3ArrayToVector2(Vector3[] v3)
+    public Vector2[] Vector3ArrayToVector2(Vector3[] v3)
     {
         // Converts vector3 array to vector2 array
 
