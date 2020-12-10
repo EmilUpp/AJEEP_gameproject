@@ -44,6 +44,9 @@ public class planetScript : MonoBehaviour
     int seed;
     public bool generateSeed;
 
+    public float atmosphereScale = 0.3f;
+    public float atmosphereDensity = 1;
+
     [Header("Mesh")]
     Mesh mesh;
     public int verticesAmount;

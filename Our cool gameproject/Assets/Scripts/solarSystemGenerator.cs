@@ -73,6 +73,9 @@ public class solarSystemGenerator : MonoBehaviour
         sun.GetComponent<planetScript>().UpdateMesh();
 
         sun.GetComponent<planetScript>().diameter = 20;
+        sun.GetComponent<planetScript>().density = 0.05f;
+
+        sun.GetComponent<planetScript>().atmosphereDensity = 0;
 
         // Adds planets orbiting itself
         addSubPlanets(sun, numberOfPlanets, new int[] { minMoonAmount, maxMoonAmount}, moonDepth);
@@ -93,12 +96,14 @@ public class solarSystemGenerator : MonoBehaviour
 
             // Start the orbitAroundBody script
             newPlanet.GetComponent<orbitAroundBody>().Start();
-            newPlanet.GetComponent<orbitAroundBody>().speed = Random.Range(100, 300);
+            newPlanet.GetComponent<orbitAroundBody>().speed = Random.Range(.5f, 2);
 
             // Start the planetScript
             newPlanet.GetComponent<planetScript>().InstanstiatePlanet();
             newPlanet.GetComponent<planetScript>().generatePlanet();
             newPlanet.GetComponent<planetScript>().diameter = (mainBody.GetComponent<planetScript>().diameter / 40) * Random.Range(0.5f, 1.5f);
+            newPlanet.GetComponent<planetScript>().density = Random.Range(80f, 120f);
+            newPlanet.GetComponent<planetScript>().atmosphereDensity = Random.Range(0f, 1f);
 
             // set position, each planet gets expoentially further out
             float parentDistanceToGrandparent = 40;
@@ -126,19 +131,21 @@ public class solarSystemGenerator : MonoBehaviour
 
             // Start the orbitAroundBody script
             newPlanet.GetComponent<orbitAroundBody>().Start();
-
+            
 
             // Start the planetScript
             newPlanet.GetComponent<planetScript>().InstanstiatePlanet();
             newPlanet.GetComponent<planetScript>().generatePlanet();
             newPlanet.GetComponent<planetScript>().diameter = (mainBody.GetComponent<planetScript>().diameter / 4) * Random.Range(0.5f, 1.5f);
+            newPlanet.GetComponent<planetScript>().density = Random.Range(80f, 120f);
+            newPlanet.GetComponent<planetScript>().atmosphereDensity = Random.Range(0f, 0.2f);
 
             // set position
             float parentDistanceToGrandparent;
             if (currentMoonDepth == 0)
             {
                 parentDistanceToGrandparent = 30 * Random.Range(0.5f, 2f);
-                newPlanet.GetComponent<orbitAroundBody>().speed = Random.Range(800, 1200);
+                newPlanet.GetComponent<orbitAroundBody>().speed = Random.Range(0.1f, 2);
             } else
             {
                 parentDistanceToGrandparent = (mainBody.GetComponent<orbitAroundBody>().distanceToTarget() / (4 * currentMoonDepth)) * Random.Range(0.5f, 2f);

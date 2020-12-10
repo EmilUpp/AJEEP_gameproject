@@ -8,7 +8,7 @@ using UnityEngine;
 public class Attractor : MonoBehaviour
 {
     // Gravinational constant, used to scale
-    const float G = 1f;
+    const float G = 10f;
 
     public static List<Attractor> attractors;
 

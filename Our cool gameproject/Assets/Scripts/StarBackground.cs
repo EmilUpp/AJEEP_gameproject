@@ -16,5 +16,6 @@ public class StarBackground : MonoBehaviour
     void Update()
     {
         transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
+        transform.localScale = new Vector3(Camera.main.orthographicSize * 1.5f, Camera.main.orthographicSize * 1.5f, 1);
     }
 }
