@@ -8,6 +8,9 @@ public class playerMovement : MonoBehaviour
     public float jumpForce;
     public GameObject groundCheck;
     public LayerMask planetsLayer;
+    public float jetPower;
+    public float jetAngularPower;
+
     private Rigidbody2D rb;
 
     [HideInInspector]
@@ -29,7 +32,8 @@ public class playerMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space)) rb.AddRelativeForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
         else canWalk = false;
-        
+
+        Debug.Log(canWalk);
     }
 
     private void FixedUpdate()
@@ -39,6 +43,20 @@ public class playerMovement : MonoBehaviour
         {
             rb.AddRelativeForce(new Vector2(Input.GetAxisRaw("Horizontal") * walkSpeed, -0.3f), ForceMode2D.Force);
         }
+        // Else jetpack
+        else
+        {
+            rb.AddRelativeForce(new Vector2(Input.GetAxisRaw("Horizontal") * jetPower, Input.GetAxisRaw("Vertical") * jetPower));
+            
+            // Jetpack Rotation
+            if (Input.GetKey(KeyCode.Q)) rb.AddTorque(jetAngularPower / 100);
+            if (Input.GetKey(KeyCode.E)) rb.AddTorque(-jetAngularPower / 100);
+
+            // Stop angular velocity on pressing X
+            if (Input.GetKey(KeyCode.X)) rb.angularDrag = 10;
+            else rb.angularDrag = 0.01f;
+
+        }
     }
 
 
@@ -47,7 +65,6 @@ public class playerMovement : MonoBehaviour
         // If in atmosphere
         if (collision.gameObject.CompareTag("Atmosphere"))
         {
-            
             // Find planet of atmosphere (atmosphere's parent)
             Transform closestPlanet = collision.transform.parent;
 

@@ -379,7 +379,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0.01
   m_GravityScale: 0
   m_Material: {fileID: 6200000, guid: 33a98d099580bb64eb7ad7992408b58b, type: 2}
   m_Interpolate: 0
@@ -458,6 +458,8 @@ MonoBehaviour:
   planetsLayer:
     serializedVersion: 2
     m_Bits: 256
+  jetPower: 1
+  jetAngularPower: 1
   canWalk: 0
 --- !u!61 &695271392
 BoxCollider2D:
