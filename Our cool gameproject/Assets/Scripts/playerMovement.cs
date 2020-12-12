@@ -32,8 +32,7 @@ public class playerMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space)) rb.AddRelativeForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
         else canWalk = false;
-
-        Debug.Log(canWalk);
+        
     }
 
     private void FixedUpdate()
