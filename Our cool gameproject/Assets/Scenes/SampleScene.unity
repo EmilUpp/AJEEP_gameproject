@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d363599f2b4c0c4d812becbd800ee11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sunPrefab: {fileID: 3616226372959510996, guid: caaf554af0223b740a5ed9a8fc267356, type: 3}
   planetPrefab: {fileID: 5259658079932534677, guid: 3092f256709f5f141a768569ad802193, type: 3}
   numberOfPlanets: 5
   minMoonAmount: 0
