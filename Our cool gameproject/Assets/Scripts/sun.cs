@@ -36,14 +36,14 @@ public class sun : MonoBehaviour
         float randMin = Convert.ToSingle(1.0 / (standardDeviation * Math.Sqrt(2 * Math.PI)) * Math.Exp(-0.5 * Math.Pow((minimumTemperature-averageTemperature) / standardDeviation, 2)));
         //maximum value is the average, as when we invert the function we will only be able to get values from one half of the curve at once
         float randMax = Convert.ToSingle(1.0 / (standardDeviation * Math.Sqrt(2 * Math.PI)));
-        Debug.Log(randMin);
-        Debug.Log(randMax);
+        
+
         //randomise a float in this range
         float rand = UnityEngine.Random.Range(randMin, randMax);
-        Debug.Log(rand);
+        
         //run the randomised number through the inverse of the bell curve
         double temperatureValue = standardDeviation * Math.Sqrt(-2 * Math.Log(rand * standardDeviation * Math.Sqrt(2 * Math.PI)));
-        Debug.Log(temperatureValue);
+        
         //as the inversed function only has the range 0 < x < average we will also need to decide if the value we just got belongs to the right or left side of the curve
         //this is decided by if the randomly generated float is divisible by two or not
         return (rand * 1000) % 2 > 1 ? Convert.ToInt32((averageTemperature + temperatureValue) * 1000) : Convert.ToInt32((averageTemperature - temperatureValue) * 1000);
