@@ -46,6 +46,6 @@ public class sun : MonoBehaviour
         Debug.Log(temperatureValue);
         //as the inversed function only has the range 0 < x < average we will also need to decide if the value we just got belongs to the right or left side of the curve
         //this is decided by if the randomly generated float is divisible by two or not
-        return (rand * 10) % 2 == 0 ? Convert.ToInt32((averageTemperature + temperatureValue) * 1000) : Convert.ToInt32((averageTemperature - temperatureValue) * 1000);
+        return (rand * 1000) % 2 > 1 ? Convert.ToInt32((averageTemperature + temperatureValue) * 1000) : Convert.ToInt32((averageTemperature - temperatureValue) * 1000);
     }
 }
