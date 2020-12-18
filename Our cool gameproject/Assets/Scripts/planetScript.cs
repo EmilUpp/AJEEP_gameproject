@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -53,6 +54,9 @@ public class planetScript : MonoBehaviour
     public Vector3[] vertices;
     public int[] triangles;
 
+    [Header("Planet Conditions")]
+    public int averageTemperature;
+
     public void InstanstiatePlanet()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
@@ -72,7 +76,7 @@ public class planetScript : MonoBehaviour
         // Allows to generate new seed in editor
         if (generateSeed)
         {
-            seed = Random.Range(0, 100000);
+            seed = UnityEngine.Random.Range(0, 100000);
         }
         generateSeed = false;
 
@@ -93,12 +97,12 @@ public class planetScript : MonoBehaviour
     {
         // Randomizes all values and creates a new mesh
 
-        amplitude = Random.Range(0.2f, 0.35f);
-        sampleSize = Random.Range(0.5f, 3);
-        octaves = Random.Range(2, 5);
-        persitence = Random.Range(0.3f, 0.7f);
-        lacunarity = Random.Range(1.5f, 4);
-        seed = Random.Range(0, 100000);
+        amplitude  = UnityEngine.Random.Range(0.2f, 0.35f);
+        sampleSize = UnityEngine.Random.Range(0.5f, 3);
+        octaves    = UnityEngine.Random.Range(2, 5);
+        persitence = UnityEngine.Random.Range(0.3f, 0.7f);
+        lacunarity = UnityEngine.Random.Range(1.5f, 4);
+        seed       = UnityEngine.Random.Range(0, 100000);
 
         // Creates the mesh
         createShape(verticesAmount);
@@ -220,5 +224,11 @@ public class planetScript : MonoBehaviour
         }
 
         return childCount;
+    }
+
+    public void updateTemperature(sun sun)
+    {
+        double constant = 0.000114;
+        averageTemperature = Convert.ToInt32(sun.emittedTemperature / (constant * Math.Pow(transform.position.magnitude - sun.transform.position.magnitude, 2)));
     }
 }

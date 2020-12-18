@@ -16,6 +16,7 @@ using UnityEngine;
  */
 public class solarSystemGenerator : MonoBehaviour
 {
+    public GameObject sunPrefab;
     public GameObject planetPrefab;
 
     public int numberOfPlanets;
@@ -56,7 +57,7 @@ public class solarSystemGenerator : MonoBehaviour
         // Creates the system
 
         // Create sun as base object
-        GameObject sun = Instantiate(planetPrefab);
+        GameObject sun = Instantiate(sunPrefab);
         sun.transform.position = transform.position;
         sun.name = "Sun";
 
