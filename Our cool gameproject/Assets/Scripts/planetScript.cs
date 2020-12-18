@@ -228,7 +228,9 @@ public class planetScript : MonoBehaviour
 
     public void updateTemperature(sun sun)
     {
-        double constant = 0.000114;
-        averageTemperature = Convert.ToInt32(sun.emittedTemperature / (constant * Math.Pow(transform.position.magnitude - sun.transform.position.magnitude, 2)));
+        //atmosphere * B * (T/(Ar^2))
+        double constantA = 0.000114;
+        double constantB = 2.04;
+        averageTemperature = Convert.ToInt32(atmosphereDensity * constantB * (sun.emittedTemperature / (constantA * Math.Pow(transform.position.magnitude - sun.transform.position.magnitude, 2))));
     }
 }
