@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class sun : MonoBehaviour
@@ -16,7 +17,10 @@ public class sun : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        for(int i = 1; i < this.GetComponentsInChildren<planetScript>().Length; i++)
+        {
+            this.GetComponentsInChildren<planetScript>()[i].updateTemperature(this);
+        }
     }
 
     /*
