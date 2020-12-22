@@ -45,8 +45,15 @@ public class planetScript : MonoBehaviour
     int seed;
     public bool generateSeed;
 
+    [Header("Atmosphere Properties")]
     public float atmosphereScale = 0.3f;
     public float atmosphereDensity = 1;
+
+    public float atmoCO2 = 1;
+    public float atmoHelium = 1;
+    public float atmoHydrogen = 1;
+    public float atmoNitrogen = 1;
+    public float atmoOxygen = 1;
 
     [Header("Mesh")]
     Mesh mesh;
