@@ -56,10 +56,10 @@ public class planetScript : MonoBehaviour
     public float atmoOxygen = 1;
 
     [Header("Mesh")]
-    Mesh mesh;
     public int verticesAmount;
     public Vector3[] vertices;
     public int[] triangles;
+    Mesh mesh;
 
     [Header("Planet Conditions")]
     public int averageTemperature;

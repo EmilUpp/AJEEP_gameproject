@@ -18,8 +18,7 @@ public class atmosphereScript : MonoBehaviour
     public float hydrogen;
     public float nitrogen;
     public float oxygen;
-
-    public float sum;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -30,19 +29,20 @@ public class atmosphereScript : MonoBehaviour
         density = transform.parent.GetComponent<planetScript>().atmosphereDensity;
         GetComponent<SpriteRenderer>().color = new Color(0.6f, 0.9f, 1, density / 3);
 
-        // Apply atmosphere composition from parent's planet script to self
+        // Get atmosphere composition values from parent's planet script to self
         float totalComp = transform.parent.GetComponent<planetScript>().atmoCO2 +
                           transform.parent.GetComponent<planetScript>().atmoHelium +
                           transform.parent.GetComponent<planetScript>().atmoHydrogen +
                           transform.parent.GetComponent<planetScript>().atmoNitrogen +
                           transform.parent.GetComponent<planetScript>().atmoOxygen;
-        co2 = transform.parent.GetComponent<planetScript>().atmoCO2 / totalComp;
-        helium = transform.parent.GetComponent<planetScript>().atmoHelium / totalComp;
-        hydrogen = transform.parent.GetComponent<planetScript>().atmoHydrogen / totalComp;
-        nitrogen = transform.parent.GetComponent<planetScript>().atmoNitrogen / totalComp;
-        oxygen = transform.parent.GetComponent<planetScript>().atmoOxygen / totalComp;
 
-        sum = co2 + helium + hydrogen + nitrogen + oxygen;
+        // Convert them values to a percentage of full atmosphere
+        co2 = transform.parent.GetComponent<planetScript>().atmoCO2 / totalComp * 100;
+        helium = transform.parent.GetComponent<planetScript>().atmoHelium / totalComp * 100;
+        hydrogen = transform.parent.GetComponent<planetScript>().atmoHydrogen / totalComp * 100;
+        nitrogen = transform.parent.GetComponent<planetScript>().atmoNitrogen / totalComp * 100;
+        oxygen = transform.parent.GetComponent<planetScript>().atmoOxygen / totalComp * 100;
+        
     }
 
     // Update is called once per frame
