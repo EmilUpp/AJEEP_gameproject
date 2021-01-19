@@ -42,6 +42,7 @@ public class cameraScript : MonoBehaviour
         Quaternion desRot;
 
         if (inAtmosphere) desRot = player.rotation; // Ayy, thank you atmosphereScript for letting me know, I will set my desired rotation to the player's rotation while in the atmosphere
+
         else desRot = Quaternion.Euler(0, 0, 0);
         Debug.Log(inAtmosphere);
 
@@ -49,7 +50,7 @@ public class cameraScript : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, desRot, rotSmoothness * Time.deltaTime); 
 
         // Zoom stuff:
-        zoomSpeed = Camera.main.orthographicSize; // faster zoom when zoomed out
+        zoomSpeed = Camera.main.orthographicSize; // zoom speed increases with current zoom amount
         float scroll = Input.GetAxis("Mouse ScrollWheel"); // Get scroll input
         if (scroll != 0.0f)
         {
