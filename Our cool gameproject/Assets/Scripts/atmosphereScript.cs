@@ -64,4 +64,12 @@ public class atmosphereScript : MonoBehaviour
             
         }
     }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // Yo camera, player has left the atmosphere
+            Camera.main.GetComponent<cameraScript>().inAtmosphere = false;
+        }
+    }
 }

@@ -26,6 +26,8 @@ public class cameraScript : MonoBehaviour
     
     void Update()
     {
+        /* 
+        //----------------- Smooth Position Movement ---------------------
         // Make the smoothness more rigid when player is further away from the camera (so the player never leaves the camera's vision)
         posSmoothness = Vector2.Distance(transform.position, player.position) * 2 + 3;
 
@@ -34,11 +36,14 @@ public class cameraScript : MonoBehaviour
 
         // Change the camera's position based on a smoothed position of the desired position
         transform.position = Vector3.Lerp(transform.position, desPos, posSmoothness * Time.deltaTime);
+        */
+        transform.position = new Vector3(player.position.x, player.position.y, -10);
 
         Quaternion desRot;
 
-        if (inAtmosphere) desRot = player.rotation; // Ayy, thank you atmosphereScript for letting me know, I will set my desired rotation to the player's rotation
-        else desRot = Quaternion.Euler(0, 0, 0); 
+        if (inAtmosphere) desRot = player.rotation; // Ayy, thank you atmosphereScript for letting me know, I will set my desired rotation to the player's rotation while in the atmosphere
+        else desRot = Quaternion.Euler(0, 0, 0);
+        Debug.Log(inAtmosphere);
 
         // Change camera's rotation based on a smoothed rotation of the desired rotation
         transform.rotation = Quaternion.Slerp(transform.rotation, desRot, rotSmoothness * Time.deltaTime); 
