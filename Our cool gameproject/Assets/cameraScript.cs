@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class cameraScript : MonoBehaviour
 {
-    public float posSmoothness;
+    //public float posSmoothness;
     public float rotSmoothness;
 
     public float zoomSpeed;
@@ -16,6 +16,9 @@ public class cameraScript : MonoBehaviour
 
     [HideInInspector]
     public bool inAtmosphere;
+
+    private Vector2 acceleration;
+    private Vector2 lastVelocity;
 
     void Start()
     {
@@ -37,6 +40,7 @@ public class cameraScript : MonoBehaviour
         // Change the camera's position based on a smoothed position of the desired position
         transform.position = Vector3.Lerp(transform.position, desPos, posSmoothness * Time.deltaTime);
         */
+        
         transform.position = new Vector3(player.position.x, player.position.y, -10);
 
         Quaternion desRot;
@@ -44,7 +48,6 @@ public class cameraScript : MonoBehaviour
         if (inAtmosphere) desRot = player.rotation; // Ayy, thank you atmosphereScript for letting me know, I will set my desired rotation to the player's rotation while in the atmosphere
 
         else desRot = Quaternion.Euler(0, 0, 0);
-        Debug.Log(inAtmosphere);
 
         // Change camera's rotation based on a smoothed rotation of the desired rotation
         transform.rotation = Quaternion.Slerp(transform.rotation, desRot, rotSmoothness * Time.deltaTime); 
