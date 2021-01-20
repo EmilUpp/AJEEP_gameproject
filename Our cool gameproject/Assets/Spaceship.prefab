@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -7575527360084468788}
   - component: {fileID: 1335721348869697691}
   - component: {fileID: 835716998330466546}
+  - component: {fileID: 2526013733913169778}
   m_Layer: 0
   m_Name: Spaceship
   m_TagString: Untagged
@@ -149,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ec06b2b35a6af6499f0db50a25d2ba2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isEntered: 0
   rotationalThrust: 3
   trimmThrust: 3
   forwardThrust: 5
@@ -282,6 +284,21 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &2526013733913169778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2736755096466471091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eab96f28d9468b9448a85635ca0ee475, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inRange: 0
+  isEntered: 0
+  range: 1.5
 --- !u!1 &8598287598904439940
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,6 +17,9 @@ using System.Collections;
  */
 public class SpaceshipController : MonoBehaviour
 {
+    [Header("Player")]
+    public bool isEntered;
+
     [Header("Thrusters")]
     public float rotationalThrust;
     public float trimmThrust;
@@ -73,7 +76,9 @@ public class SpaceshipController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        isEntered = GetComponent<Enterable>().isEntered;
+
+        if (Input.GetKeyDown(KeyCode.X) && isEntered)
         {
             if (angularStabilizerOn)
             {
@@ -114,7 +119,10 @@ public class SpaceshipController : MonoBehaviour
             load = loadCapacity;
         }
 
-        CheckPlayerNavigationActions();
+        if (isEntered)
+        {
+            CheckPlayerNavigationActions();
+        }
 
         if (pathPointList.Count > 0)
         {
