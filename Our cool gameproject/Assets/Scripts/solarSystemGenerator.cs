@@ -77,6 +77,11 @@ public class solarSystemGenerator : MonoBehaviour
         sun.GetComponent<planetScript>().density = 0.05f;
 
         sun.GetComponent<planetScript>().atmosphereDensity = 0;
+        sun.GetComponent<planetScript>().atmoCO2 = Random.Range(0, 100);
+        sun.GetComponent<planetScript>().atmoHelium = Random.Range(0, 100);
+        sun.GetComponent<planetScript>().atmoHydrogen = Random.Range(0, 100);
+        sun.GetComponent<planetScript>().atmoNitrogen = Random.Range(0, 100);
+        sun.GetComponent<planetScript>().atmoOxygen = Random.Range(0, 100);
 
         // Adds planets orbiting itself
         addSubPlanets(sun, numberOfPlanets, new int[] { minMoonAmount, maxMoonAmount}, moonDepth);
@@ -104,7 +109,13 @@ public class solarSystemGenerator : MonoBehaviour
             newPlanet.GetComponent<planetScript>().generatePlanet();
             newPlanet.GetComponent<planetScript>().diameter = (mainBody.GetComponent<planetScript>().diameter / 40) * Random.Range(0.5f, 1.5f);
             newPlanet.GetComponent<planetScript>().density = Random.Range(80f, 120f);
+
             newPlanet.GetComponent<planetScript>().atmosphereDensity = Random.Range(0f, 1f);
+            newPlanet.GetComponent<planetScript>().atmoCO2 = Random.Range(0, 100);
+            newPlanet.GetComponent<planetScript>().atmoHelium = Random.Range(0, 100);
+            newPlanet.GetComponent<planetScript>().atmoHydrogen = Random.Range(0, 100);
+            newPlanet.GetComponent<planetScript>().atmoNitrogen = Random.Range(0, 100);
+            newPlanet.GetComponent<planetScript>().atmoOxygen = Random.Range(0, 100);
 
             // set position, each planet gets expoentially further out
             float parentDistanceToGrandparent = 40;
@@ -139,7 +150,13 @@ public class solarSystemGenerator : MonoBehaviour
             newPlanet.GetComponent<planetScript>().generatePlanet();
             newPlanet.GetComponent<planetScript>().diameter = (mainBody.GetComponent<planetScript>().diameter / 4) * Random.Range(0.5f, 1.5f);
             newPlanet.GetComponent<planetScript>().density = Random.Range(80f, 120f);
+
             newPlanet.GetComponent<planetScript>().atmosphereDensity = Random.Range(0f, 0.2f);
+            newPlanet.GetComponent<planetScript>().atmoCO2 = Random.Range(0, 100);
+            newPlanet.GetComponent<planetScript>().atmoHelium = Random.Range(0, 100);
+            newPlanet.GetComponent<planetScript>().atmoHydrogen = Random.Range(0, 100);
+            newPlanet.GetComponent<planetScript>().atmoNitrogen = Random.Range(0, 100);
+            newPlanet.GetComponent<planetScript>().atmoOxygen = Random.Range(0, 100);
 
             // set position
             float parentDistanceToGrandparent;

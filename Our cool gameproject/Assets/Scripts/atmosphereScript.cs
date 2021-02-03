@@ -12,6 +12,14 @@ public class atmosphereScript : MonoBehaviour
     public float density;
     public LayerMask planetsLayer;
 
+    [Header("Atmosphere Composition")]
+    public float co2;
+    public float helium;
+    public float hydrogen;
+    public float nitrogen;
+    public float oxygen;
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +28,21 @@ public class atmosphereScript : MonoBehaviour
         oldpos = transform.position;
         density = transform.parent.GetComponent<planetScript>().atmosphereDensity;
         GetComponent<SpriteRenderer>().color = new Color(0.6f, 0.9f, 1, density / 3);
+
+        // Get atmosphere composition values from parent's planet script to self
+        float totalComp = transform.parent.GetComponent<planetScript>().atmoCO2 +
+                          transform.parent.GetComponent<planetScript>().atmoHelium +
+                          transform.parent.GetComponent<planetScript>().atmoHydrogen +
+                          transform.parent.GetComponent<planetScript>().atmoNitrogen +
+                          transform.parent.GetComponent<planetScript>().atmoOxygen;
+
+        // Convert them values to a percentage of full atmosphere
+        co2 = transform.parent.GetComponent<planetScript>().atmoCO2 / totalComp * 100;
+        helium = transform.parent.GetComponent<planetScript>().atmoHelium / totalComp * 100;
+        hydrogen = transform.parent.GetComponent<planetScript>().atmoHydrogen / totalComp * 100;
+        nitrogen = transform.parent.GetComponent<planetScript>().atmoNitrogen / totalComp * 100;
+        oxygen = transform.parent.GetComponent<planetScript>().atmoOxygen / totalComp * 100;
+        
     }
 
     // Update is called once per frame
